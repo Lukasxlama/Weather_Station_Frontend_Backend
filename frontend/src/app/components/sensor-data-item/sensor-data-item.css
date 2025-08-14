@@ -1,0 +1,14 @@
+/* Ensure the icon is a bit larger */
+.bi
+{
+    font-size: 1.5rem;
+}
+
+/* Fine-tune the card width for smaller viewports */
+@media (max-width: 576px)
+{
+    .card
+    {
+        width: 100% !important;
+    }
+}

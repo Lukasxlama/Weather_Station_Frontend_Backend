@@ -1,0 +1,82 @@
+<div class="container-fluid py-4 bg-dark text-light min-vh-100">
+    <h2 class="mb-4">🔧 SQL Debug Console</h2>
+
+    <!-- Explanation -->
+    <p class="mb-3">
+        This console allows you to execute readonly SQL <strong>SELECT</strong> queries against the database. Only tables
+        that exist in the database can be queried, and at most <strong>999 rows</strong> will be returned.
+    </p>
+
+    <!-- SQL Editor with Frame -->
+    <div class="mb-3 border rounded p-1 bg-light">
+        <ngx-codemirror [(ngModel)]="sqlQuery" [options]="editorOptions" style="height: 300px;">
+        </ngx-codemirror>
+    </div>
+
+    <!-- SELECT Error Message -->
+    @if (isNotSelect)
+    {
+        <div class="alert alert-danger">
+            Only SELECT statements are allowed!
+        </div>
+    }
+
+    <!-- Buttons -->
+    <div class="mb-3">
+        <button class="btn btn-outline-light me-2" (click)="runQuery()">Run</button>
+        <button class="btn btn-outline-secondary me-2" (click)="toggleView()">
+            View: {{ viewMode === 'table' ? 'Table' : 'Raw' }}
+        </button>
+    </div>
+
+    <!-- Results -->
+    @if (result)
+    {
+        <hr>
+        @if (!isError)
+        {
+            <h2 class="mb-4">✅ Response</h2>
+        }
+
+        @else
+        {
+            <h2 class="mb-4">❌ Response</h2>
+        }
+
+        <div class="rounded">
+            <!-- Raw JSON -->
+            @if (viewMode === 'raw')
+            {
+                <pre class="text-white-50">{{ result | json }}</pre>
+            }
+
+            <!-- Table View -->
+            @else
+            {
+                <div class="table-responsive rounded bg-light">
+                    <table class="table table-dark table-sm mb-0 text-center align-middle">
+                        <thead>
+                            <tr>
+                                @for (key of resultKeys; let i = $index; track i)
+                                {
+                                    <th>{{ key }}</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (row of result; let i = $index; track i)
+                            {
+                                <tr>
+                                    @for (key of resultKeys; let i = $index; track i)
+                                    {
+                                        <td>{{ row[key] ?? '-'}}</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</div>

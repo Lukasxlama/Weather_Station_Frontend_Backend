@@ -1,0 +1,95 @@
+<div class="page-shell glass">
+    <h2 class="mb-3 text-center">Aktuelle Daten</h2>
+
+    <!-- Sensor Data Cards -->
+    @if (receivedPacket && receivedPacket.sensor_data)
+    {
+        <app-sensor-data [receivedPacket]="receivedPacket"></app-sensor-data>
+    }
+    
+    @else
+    {
+        <div class="placeholder-glass">Waiting for first packet…</div>
+    }
+
+    <!-- Divider -->
+    <hr class="hr-aurora my-4">
+
+    <!-- Description & Image Example -->
+    <div class="desc-carousel">
+        <div class="desc-text">
+            <h3 class="mb-3">🌤 Selbstgebaute, autarke Wetterstation</h3>
+
+            <p>
+                Dieses Projekt vereint <strong>Elektronik</strong>, <strong>Programmierung</strong> und <strong>Funktechnik</strong>
+                in einer komplett <em>off-grid</em> arbeitenden Wetterstation.<br>
+                Das Herzstück ist ein <code>ESP32 Dev Module</code> in Kombination mit dem präzisen <code>BME680</code>-Sensor,
+                der <b>Temperatur</b>, <b>Luftfeuchtigkeit</b>,<br> <b>Luftdruck</b> und <b>Gaswiderstand</b> erfasst.
+            </p>
+            <br>
+            <ul class="desc-facts">
+                <li>📡 Datenübertragung via <strong>LoRa 868&nbsp;MHz</strong> (SX1276)</li>
+                <li>🔋 Energieautark durch <strong>2× 5 W Solarpanels</strong> + 3.200 mAh Li-Ion</li>
+                <li>📟 Lokale Anzeige auf kleinem <strong>Display</strong></li>
+                <li>🛡 Wetterfestes Outdoor-Gehäuse &amp; 3D-gedruckter Sensorhalter</li>
+            </ul>
+
+            <p>
+                Installiert auf einem stabilen Baumstumpf im Garten, arbeitet die Station ganzjährig
+                unabhängig vom Stromnetz.<br>Die Sensoren sind in einer PVC-Röhre erhöht platziert, um präzise
+                Messwerte zu gewährleisten.
+            </p>
+
+            <p>
+                Im Haus empfängt ein <strong>Raspberry&nbsp;Pi</strong> die Daten, leitet sie an einen
+                <em>MQTT-Broker</em> weiter und macht sie sowohl in <br><strong>Home Assistant</strong>
+                als auch im eigenen Flask-Backend verfügbar – perfekt für Live-Anzeige und Langzeitanalyse.
+            </p>
+        </div>
+        
+        <div class="carousel-box mt-4">
+            <div id="stationCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel" data-bs-touch="true"
+                data-bs-interval="5000">
+        
+                <!-- 16:9 Viewport; relative = Overlay bleibt innen -->
+                <div class="carousel-viewport position-relative">
+                    <div class="carousel-inner">
+                        @for (img of images; let i = $index; track i) {
+                        <div class="carousel-item" [class.active]="i === 0">
+                            <img [src]="img.src" [alt]="img.alt" class="carousel-img" loading="lazy">
+                        </div>
+                        }
+                    </div>
+        
+                    <!-- Overlay-UI: eine Box für Titel + Dots -->
+                     @if (images.length)
+                     {
+                        <div class="caption-glass" [class.is-switching]="isSwitching">
+                            <h5 class="m-0 text-truncate">
+                                {{ images[activeIndex].title }}
+                            </h5>
+                        
+                            <div class="carousel-indicators m-0">
+                                @for (img of images; let i = $index; track i) {
+                                <button type="button" [attr.data-bs-target]="'#stationCarousel'" [attr.data-bs-slide-to]="i"
+                                    [class.active]="i === 0" [attr.aria-current]="i === 0 ? 'true' : null"
+                                    [attr.aria-label]="'Slide ' + (i+1)"></button>
+                                }
+                            </div>
+                        </div>
+                     }
+                </div>
+        
+                <!-- Controls bleiben außerhalb, werden nicht abgeschnitten -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#stationCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#stationCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,596 @@
+/* =========================================================
+   Global Theme + Aurora Background + Bootstrap Overrides
+   File: src/styles.css
+   ========================================================= */
+
+/* ---------- Tokens (colors, glass, bootstrap) ---------- */
+:root
+{
+  /* Dark base */
+  --bg-0:#181818;
+  --bg-1:#212121;
+  --bg-2:#303030;
+
+  /* Warm aurora palette */
+  --aurora-rose: 255 120 150;
+  --aurora-amber:255 185 120;
+  --aurora-violet:180 140 255;
+  --aurora-cyan:  90 210 200;
+
+  /* Glass */
+  --glass-bg: rgba(255,255,255,.06);
+  --glass-stroke: rgba(255,255,255,.10);
+  --glass-stroke-strong: rgba(255,255,255,.14);
+  --glass-highlight: rgba(255,255,255,.12);
+  --glass-shadow-1: 0 6px 22px rgba(0,0,0,.35);
+  --glass-shadow-2: 0 10px 30px rgba(0,0,0,.45);
+  --glass-blur: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+
+  /* Bootstrap surface → transparent so aurora shines through */
+  --bs-body-bg: transparent;
+  --bs-body-color: #e7e9ee;
+  --bs-card-bg: transparent;
+  --bs-dropdown-bg: transparent;
+  --bs-offcanvas-bg: transparent;
+  --bs-modal-bg: transparent;
+
+  /* Aurora positions (updatable via JS) */
+  --g1x:12%; --g1y:10%;
+  --g2x:72%; --g2y:-4%;
+  --g3x:56%; --g3y:96%;
+  --g4x:18%; --g4y:82%;
+}
+
+/* ---------- Base reset for transparent layout ---------- */
+html,
+body
+{
+  background: transparent !important;
+  color: #e7e9ee;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Make common shells transparent */
+app-root,
+.app-root,
+main,
+.container,
+.container-fluid,
+.row,
+.col,
+section,
+article
+{
+  background: transparent !important;
+}
+
+/* Soften stray .bg-dark (except navbar) */
+.bg-dark:not(.navbar)
+{
+  background-color: rgba(0,0,0,.18) !important;
+}
+
+/* =========================================================
+   Aurora Background
+   ========================================================= */
+.aurora-bg
+{
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 900px at var(--g1x) var(--g1y), rgba(var(--aurora-rose)/.46),  transparent 60%),
+    radial-gradient(1100px 800px at var(--g2x) var(--g2y), rgba(var(--aurora-amber)/.42), transparent 62%),
+    radial-gradient(1000px 900px at var(--g3x) var(--g3y), rgba(var(--aurora-violet)/.30),transparent 60%),
+    radial-gradient(900px  700px at var(--g4x) var(--g4y), rgba(var(--aurora-cyan)/.24),  transparent 62%),
+    linear-gradient(180deg, var(--bg-2) 0%, var(--bg-0) 100%);
+  filter: saturate(118%);
+  box-shadow:
+    inset 0 0 140px 30px rgba(0,0,0,.58),
+    inset 0 -80px 160px -80px rgba(0,0,0,.45);
+  animation: auroraShift 32s ease-in-out infinite alternate;
+}
+
+.aurora-bg::after
+{
+  /* very soft grain, large tile size */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .025;
+  mix-blend-mode: overlay;
+  background-image:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/>\
+<feColorMatrix type='saturate' values='0'/></filter>\
+<rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>");
+  background-size: 1000px 1000px;
+}
+
+@keyframes auroraShift
+{
+  0%
+  { --g1x:10%; --g1y:8%;  --g2x:78%; --g2y:-6%; --g3x:52%; --g3y:98%; --g4x:22%; --g4y:82%; }
+  50%
+  { --g1x:6%;  --g1y:18%; --g2x:86%; --g2y:-2%; --g3x:46%; --g3y:90%; --g4x:30%; --g4y:72%; }
+  100%
+  { --g1x:18%; --g1y:6%;  --g2x:70%; --g2y:6%;  --g3x:60%; --g3y:92%; --g4x:16%; --g4y:86%; }
+}
+
+@media (prefers-reduced-motion: reduce)
+{
+  .aurora-bg
+  {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   Glass Utilities
+   ========================================================= */
+.glass
+{
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)), var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow-1);
+  position: relative;
+}
+
+.glass::before
+{
+  /* subtle top highlight */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, var(--glass-highlight), transparent 40%);
+  opacity: .6;
+}
+
+.glass--strong
+{
+  border-color: var(--glass-stroke-strong);
+  box-shadow: var(--glass-shadow-2);
+}
+
+.glass--pill
+{
+  border-radius: 999px;
+}
+
+.hr-glass
+{
+  height: 1px;
+  border: 0;
+  margin: .75rem 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+}
+
+/* =========================================================
+   Bootstrap Overrides (v5.x)
+   ========================================================= */
+
+/* Navbar → glass bar */
+.navbar.bg-transparent
+{
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border-bottom: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+}
+
+/* Navbar links → underline indicator */
+.navbar .nav-link
+{
+  position: relative;
+  opacity: .85;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.navbar .nav-link:hover
+{
+  opacity: 1;
+  transform: translateY(-1px);
+}
+.navbar .nav-link::after
+{
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(138,180,248), rgb(255,185,120));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .25s ease;
+}
+.navbar .nav-link:hover::after
+{
+  transform: scaleX(.6);
+}
+.navbar .nav-link.active
+{
+  opacity: 1;
+}
+.navbar .nav-link.active::after
+{
+  transform: scaleX(1);
+}
+
+/* Brand badge */
+.brand-badge
+{
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.10);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+}
+
+/* Navbar toggler */
+.navbar-toggler
+{
+  border: 0 !important;
+  padding: .45rem .6rem;
+  background: rgba(255,255,255,.12);
+  border-radius: .85rem;
+}
+
+/* Cards → glass body */
+.card
+{
+  background: transparent;
+  border: 0;
+}
+.card .card-body
+{
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)), var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow-1);
+}
+
+/* Dropdown, offcanvas, modal, toast → same glass surface */
+.dropdown-menu,
+.offcanvas,
+.modal-content,
+.toast
+{
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04)), var(--glass-bg) !important;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow-2);
+}
+
+/* Form controls */
+.form-control,
+.form-select,
+.input-group-text
+{
+  background: rgba(255,255,255,.06);
+  color: #eaecef;
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(8px) saturate(130%);
+  -webkit-backdrop-filter: blur(8px) saturate(130%);
+}
+.form-control:focus,
+.form-select:focus
+{
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  border-color: rgba(138,180,248,.45);
+  box-shadow: 0 0 0 0.25rem rgba(138,180,248,.20);
+  outline: 0;
+}
+
+/* Buttons */
+.btn
+{
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-stroke);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+  backdrop-filter: blur(6px) saturate(140%);
+  -webkit-backdrop-filter: blur(6px) saturate(140%);
+  color: #f2f4f8;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+.btn:hover
+{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  opacity: .98;
+}
+.btn:active
+{
+  transform: translateY(0);
+}
+
+/* Badges */
+.badge
+{
+  background: rgba(255,255,255,.10);
+  border: 1px solid var(--glass-stroke);
+  color: #eaecef;
+  border-radius: 999px;
+}
+
+/* Tables */
+.table
+{
+  color: #e0e2e6;
+  --bs-table-bg: transparent;
+  --bs-table-striped-color: #e0e2e6;
+  --bs-table-striped-bg: rgba(255,255,255,.02);
+  border-color: rgba(255,255,255,.08);
+}
+.table thead th
+{
+  background: rgba(255,255,255,.06);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  backdrop-filter: blur(6px);
+}
+
+/* Progress */
+.progress
+{
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-lg);
+}
+.progress-bar
+{
+  background: linear-gradient(90deg, rgb(138,180,248), rgb(255,185,120));
+}
+
+/* Live dot utility */
+.live-dot
+{
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff5d5d;
+  box-shadow: 0 0 0 0 rgba(255,93,93,.6);
+  animation: livePulse 1.6s infinite;
+}
+@keyframes livePulse
+{
+  0%   { box-shadow: 0 0 0 0 rgba(255,93,93,.6); }
+  70%  { box-shadow: 0 0 0 8px rgba(255,93,93,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,93,93,0); }
+}
+
+/* ---------- Fallback when no backdrop-filter ---------- */
+@supports not ((backdrop-filter: blur(1px)))
+{
+  .glass,
+  .glass::before,
+  .navbar.bg-transparent,
+  .card .card-body,
+  .dropdown-menu,
+  .offcanvas,
+  .form-control,
+  .form-select,
+  .input-group-text,
+  .btn,
+  .modal-content,
+  .toast
+  {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #262626 !important;
+  }
+}
+
+.hr-aurora
+{
+    height: 2px;
+    border: 0;
+    margin: 1.25rem 0;
+    background: linear-gradient(90deg,
+            rgba(138, 180, 248, 0) 0%,
+            rgba(138, 180, 248, .45) 20%,
+            rgba(255, 185, 120, .75) 50%,
+            rgba(138, 180, 248, .45) 80%,
+            rgba(138, 180, 248, 0) 100%);
+    box-shadow: 0 0 12px rgba(255, 185, 120, .25);
+    opacity: .95;
+}
+
+/* =========================================
+   Page shell — main glass container
+   ========================================= */
+.page-shell
+{
+    width: auto;
+    max-width: none;
+    /* no center cap */
+    margin: 1rem;
+    /* m-3 to page edge */
+    padding: 18px 20px 22px;
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--glass-stroke);
+    background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .03)), var(--glass-bg);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .32);
+    overflow: hidden;
+    /* clean rounded corners */
+}
+
+/* optional: on very small screens, a bit tighter */
+@media (max-width: 576px)
+{
+    .page-shell
+    {
+        margin: .75rem;
+    }
+}
+
+/* Optional: lighter variant */
+.page-shell--light
+{
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, .06),
+            rgba(255, 255, 255, .035)),
+        var(--glass-bg);
+}
+
+/* =========================================
+   Inner content transparent
+   ========================================= */
+.transparent-strip,
+.card-glass,
+.glass-sub
+{
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+/* ================================
+   Carousel — viewport, caption, arrows
+   ================================ */
+
+/* outer box: keeps room for arrows */
+.carousel-box {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 3rem;
+  position: relative;
+}
+
+/* 16:9 viewport with glass look */
+.carousel-viewport {
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  border: 1px solid var(--glass-stroke);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .04)), var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  box-shadow: var(--glass-shadow-1);
+}
+
+.carousel-inner,
+.carousel-item {
+  height: 100%;
+}
+
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* controls in padded area */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 1;
+}
+
+/* caption bar (title + dots) */
+.caption-glass {
+  position: absolute;
+  left: 50%;
+  bottom: .75rem;
+  transform: translateX(-50%);
+  max-width: calc(100% - 2rem);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45rem;
+  padding: .55rem .9rem .6rem;
+  background: rgba(0, 0, 0, .35);
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: var(--radius-xl);
+  z-index: 3;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.caption-glass.is-switching {
+  opacity: .6;
+  transform: translateX(-50%) translateY(1px);
+}
+
+.caption-glass h5 {
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* indicators inside caption */
+.caption-glass .carousel-indicators {
+  position: static;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: .35rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.caption-glass .carousel-indicators [data-bs-target] {
+  width: 22px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .45);
+  background: rgba(255, 255, 255, .35);
+  transition: transform .2s ease, background-color .2s ease;
+}
+
+.caption-glass .carousel-indicators .active {
+  background: linear-gradient(90deg, rgb(138, 180, 248), rgb(255, 185, 120));
+  border-color: rgba(255, 255, 255, .7);
+  transform: translateY(-1px);
+}
+
+/* responsive tweaks */
+@media (max-width: 768px) {
+  .carousel-box {
+    padding: 0 2rem;
+    max-width: 100%;
+  }
+
+  .caption-glass {
+    bottom: .55rem;
+    padding: .45rem .7rem;
+    gap: .35rem;
+  }
+}
