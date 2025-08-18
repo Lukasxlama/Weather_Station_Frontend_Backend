@@ -1,1 +1,44 @@
-<p>trend works!</p>
+<div class="page-shell glass">
+    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+        <h2 class="m-0">📈 Trends</h2>
+
+        <div class="btn-group">
+            <button class="btn btn-sm btn-outline-light" [class.active]="range==='24h'"
+                (click)="changeRange('24h')">24h</button>
+            <button class="btn btn-sm btn-outline-light" [class.active]="range==='7d'"
+                (click)="changeRange('7d')">7d</button>
+            <button class="btn btn-sm btn-outline-light" [class.active]="range==='30d'"
+                (click)="changeRange('30d')">30d</button>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card glass-sub">
+            <div class="chart-title">Temperatur</div>
+            <div class="chart-wrap"><canvas #tempCanvas></canvas></div>
+        </div>
+
+        <div class="chart-card glass-sub">
+            <div class="chart-title">Luftfeuchtigkeit</div>
+            <div class="chart-wrap"><canvas #humCanvas></canvas></div>
+        </div>
+
+        <div class="chart-card glass-sub">
+            <div class="chart-title">Luftdruck</div>
+            <div class="chart-wrap"><canvas #pressCanvas></canvas></div>
+        </div>
+
+        <div class="chart-card glass-sub">
+            <div class="chart-title">Gaswiderstand</div>
+            <div class="chart-wrap"><canvas #gasCanvas></canvas></div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-outline-secondary btn-sm" (click)="resetAllZoom()">
+            Reset Zoom
+        </button>
+
+        <div class="spinner-border spinner-border-sm ms-auto" *ngIf="loading"></div>
+    </div>
+</div>

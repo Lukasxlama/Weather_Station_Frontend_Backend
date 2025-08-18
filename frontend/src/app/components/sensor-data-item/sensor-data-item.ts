@@ -27,15 +27,20 @@ export class SensorDataItem
   /** Corresponding value, e.g. 23.4 or "OK" */
   @Input() value!: string | number;
 
+  /** Optional Unit, e.g. °C, %, hPa */
+  @Input() unit?: string;
+
   /** Optional Bootstrap Icon class, e.g. "bi-thermometer-half" */
   @Input() icon?: SensorDataIcon;
 
   get displayValue(): string {
+    let valueStr: string;
     if (this.name.toLowerCase().includes('timestamp') && typeof this.value === 'string') {
       const date = new Date(this.value);
-      return date.toLocaleString([], { dateStyle: 'short', timeStyle: 'short' });
+      valueStr = date.toLocaleString([], { dateStyle: 'long', timeStyle: 'short' });
+    } else {
+      valueStr = String(this.value);
     }
-    return String(this.value);
+    return this.unit ? `${valueStr} ${this.unit}` : valueStr;
   }
-
 }

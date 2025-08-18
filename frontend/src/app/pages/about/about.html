@@ -1,0 +1,153 @@
+<div class="page-shell glass">
+    <hr class="hr-aurora my-4">
+
+    <!-- Description & Image Example -->
+    <div class="desc-carousel">
+        <div class="desc-text">
+            <h2 class="mb-4">🌤 Über das Projekt</h2>
+            
+            <!-- Idee & Motivation -->
+            <section class="mb-5">
+                <h4>💡 Idee & Motivation</h4>
+                <p>
+                    Dieses Projekt begann mit der einfachen Frage:
+                    <em>„Kann man eine eigene Wetterstation bauen, die völlig unabhängig vom Stromnetz arbeitet?“</em><br>
+                    Die Antwort: Ja – und genau das macht diese Station. Sie vereint
+                    <strong>Elektronik</strong>, <strong>Programmierung</strong> und <strong>Funktechnik</strong>
+                    in einem kleinen, aber leistungsfähigen System.
+                </p>
+                <p>
+                    Ziel war es, eine Lösung zu schaffen, die <b>zuverlässig Messwerte liefert</b>,
+                    <b>energieautark arbeitet</b> und gleichzeitig Spaß beim Bauen macht.
+                    Ganz nebenbei eignet sich das Projekt perfekt, um neue Technologien wie
+                    <code>LoRa</code> und <code>MQTT</code> praktisch auszuprobieren.
+                </p>
+            </section>
+            
+            <!-- Hardware -->
+            <section class="mb-5">
+                <h4>🔧 Hardware</h4>
+                <p>
+                    Im Zentrum steht ein <code>ESP32</code>, ein stromsparender Mikrocontroller mit reichlich Power
+                    für Sensorabfragen und Funkübertragung. Der angeschlossene <code>BME680</code>-Sensor misst
+                    <b>Temperatur</b>, <b>Luftfeuchtigkeit</b>, <b>Luftdruck</b> und den <b>Gaswiderstand</b>.
+                </p>
+                <p>
+                    Für die Energieversorgung sorgen zwei <strong>5 W Solarpanels</strong>, die einen
+                    <strong>3.200 mAh Li-Ion-Akku</strong> laden. Damit läuft die Station
+                    völlig autark – selbst in den Wintermonaten.
+                </p>
+                <p>
+                    Die gesamte Elektronik steckt in einem wetterfesten Outdoor-Gehäuse, ergänzt durch
+                    3D-gedruckte Halterungen für die Sensoren. So ist sie robust genug, um
+                    <b>ganzjährig Wind und Wetter</b> standzuhalten.
+                </p>
+            </section>
+            
+            <!-- Funk & Übertragung -->
+            <section class="mb-5">
+                <h4>📡 Funk & Übertragung</h4>
+                <p>
+                    Die Messwerte werden über <strong>LoRa 868 MHz</strong> (SX1276) übertragen.
+                    Diese Technik ermöglicht Reichweiten von mehreren hundert Metern – ideal für
+                    den Garten, ohne auf WLAN oder Mobilfunk angewiesen zu sein.
+                </p>
+                <p>
+                    Im Haus empfängt ein <strong>Raspberry Pi</strong> die Pakete. Ein
+                    <code>MQTT-Broker</code> verteilt die Daten weiter, sodass sie sowohl in
+                    <strong>Home Assistant</strong> als auch im eigenen Flask-Backend verfügbar sind.
+                </p>
+            </section>
+            
+            <!-- Software & Visualisierung -->
+            <section class="mb-5">
+                <h4>💻 Software & Visualisierung</h4>
+                <p>
+                    Das Backend basiert auf <code>Flask</code>, einer leichten Python-Web-API,
+                    die die Sensordaten speichert und bereitstellt.
+                    Dazu kommt eine eigene SQL-Debug-Konsole im Frontend, die direkte Einblicke in
+                    die Datenbank erlaubt.
+                </p>
+                <p>
+                    Im Frontend werden die Daten <b>live</b> angezeigt – optimiert für Desktop und Mobile.
+                    Neben der aktuellen Anzeige gibt es Langzeitanalysen und eine
+                    übersichtliche, glasartige UI, die das Projekt modern wirken lässt.
+                </p>
+            </section>
+            
+            <!-- Installation & Alltag -->
+            <section class="mb-5">
+                <h4>🌱 Installation im Garten</h4>
+                <p>
+                    Die Station ist auf einem stabilen Baumstumpf montiert, erhöht durch eine PVC-Röhre,
+                    um Störungen durch Bodennähe zu vermeiden. So werden die Messwerte präziser und
+                    repräsentativer für die Umgebung.
+                </p>
+                <p>
+                    Im Alltag liefert die Station <b>verlässliche Live-Daten</b>,
+                    die nicht nur spannend zu beobachten sind, sondern auch ganz praktisch genutzt werden können –
+                    etwa um Lüften besser zu timen oder Wetterumschwünge früh zu bemerken.
+                </p>
+            </section>
+            
+            <!-- Fazit -->
+            <section>
+                <h4>🚀 Fazit</h4>
+                <p>
+                    Aus einer Idee ist ein vollständiges System geworden:
+                    eine <b>energieautarke, smarte Wetterstation</b>, die durch
+                    <strong>Do-it-yourself</strong>-Ansatz, moderne Technologien und
+                    robuste Bauweise überzeugt.
+                </p>
+                <p>
+                    Das Projekt wächst weiter – von zusätzlichen Sensoren bis hin zu
+                    intelligenten Auswertungen mit Machine Learning sind viele Erweiterungen denkbar.
+                    Und genau das macht es so spannend!
+                </p>
+            </section>
+        </div>
+
+        <hr class="hr-aurora my-4">
+        <h2 class="mb-4">🖼️ Bilder</h2>
+        <div class="carousel-box mt-4">
+            <div #stationCarouselEl id="stationCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel"
+                data-bs-touch="true" data-bs-interval="3000">
+
+                <!-- 16:9 Viewport; relative = Overlay bleibt innen -->
+                <div class="carousel-viewport position-relative">
+                    <div class="carousel-inner">
+                        @for (img of images; let i = $index; track i) {
+                        <div class="carousel-item" [class.active]="i === 0">
+                            <img [src]="img.src" [alt]="img.alt" class="carousel-img" loading="lazy">
+                        </div>
+                        }
+                    </div>
+
+                    <!-- Overlay-UI: eine Box für Titel -->
+                    @if (images.length)
+                    {
+                    <div class="caption-glass" [class.is-switching]="isSwitching">
+                        <h5 class="m-0 text-truncate">
+                            {{ images[activeIndex].title }}
+                        </h5>
+                    </div>
+                    }
+                </div>
+
+                <!-- Controls bleiben außerhalb, werden nicht abgeschnitten -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#stationCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#stationCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr class="hr-aurora my-4">
+</div>

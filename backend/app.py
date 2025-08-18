@@ -114,7 +114,7 @@ def debug_sql():
     Accepts JSON { "sql": "<SELECT statement>" }.
     - Enforces single SELECT-only
     - Read-only SQLite connection
-    - Server-side row cap (max 999 rows), independent of user SQL
+    - Server-side row cap (max 9999 rows), independent of user SQL
     - Short execution timeout via progress handler
     """
     payload = request.get_json(silent=True) or {}
@@ -169,7 +169,7 @@ def debug_sql():
         cols = [d[0] for d in cur.description] if cur.description else []
 
         # Harte Row-Cap (serverseitig, unabhängig vom SQL der Nutzer)
-        rows = cur.fetchmany(999)
+        rows = cur.fetchmany(9999)
 
         # rows -> JSON-serialisierbar
         result = [dict(zip(cols, r)) for r in rows]
@@ -185,6 +185,97 @@ def debug_sql():
     finally:
         con.set_progress_handler(None, 0)
         con.close()
+
+# --- Trends API ---
+from datetime import datetime, timezone
+
+def pick_bucket_seconds(span_seconds: float) -> int:
+    """
+    Wählt eine sinnvolle Bucket-Größe (Sekunden) für ~600 Punkte.
+    """
+    # Ziel: <= 600 Punkte
+    target = 600
+    step = max(60, int(span_seconds // target))  # min 60s, runde grob
+    # runde auf gängige Schritte
+    for s in [60, 120, 300, 600, 900, 1800, 3600, 7200, 14400, 21600, 43200, 86400]:
+        if step <= s:
+            return s
+    return 86400
+
+def iso_utc(dt: datetime) -> str:
+    return dt.astimezone(timezone.utc).isoformat()
+
+@app.route("/trends", methods=["GET"])
+def trends():
+    """
+    GET /trends?from=ISO8601&to=ISO8601
+    Liefert downsampled Zeitreihen (avg je Bucket) für temperature, humidity, pressure, gas_resistance.
+    """
+    frm = request.args.get("from")
+    to  = request.args.get("to")
+
+    if not frm or not to:
+        return jsonify({"error": "Missing 'from' or 'to'"}), 400
+
+    try:
+        dt_from = datetime.fromisoformat(frm.replace("Z", "+00:00"))
+        dt_to   = datetime.fromisoformat(to.replace("Z", "+00:00"))
+    except Exception:
+        return jsonify({"error": "Invalid ISO datetime"}), 400
+
+    if dt_to <= dt_from:
+        return jsonify({"error": "'to' must be after 'from'"}), 400
+
+    span_seconds = (dt_to - dt_from).total_seconds()
+    bucket = pick_bucket_seconds(span_seconds)
+
+    # SQLite: Bucket via julianday() → Sekunden seit Epochen-Nähe
+    # Wir bilden eine "bucket_ts" (Startzeit des Buckets in UTC ISO).
+    # Wichtig: TIMESTAMP-Spalte in deiner DB ist ISO (UTC) – so wie bisher.
+    sql = f"""
+    WITH series AS (
+      SELECT
+        CAST((strftime('%s', timestamp) / {bucket}) AS INTEGER) * {bucket} AS bucket_epoch,
+        temperature, humidity, pressure, gas_resistance
+      FROM packets
+      WHERE timestamp >= ? AND timestamp < ?
+    )
+    SELECT
+      bucket_epoch,
+      AVG(temperature) AS temperature,
+      AVG(humidity) AS humidity,
+      AVG(pressure) AS pressure,
+      AVG(gas_resistance) AS gas_resistance
+    FROM series
+    GROUP BY bucket_epoch
+    ORDER BY bucket_epoch ASC;
+    """
+
+    rows = query_db(sql, (iso_utc(dt_from), iso_utc(dt_to)))
+
+    def to_points(key: str):
+        pts = []
+        for r in rows:
+            # back to ISO (UTC) from epoch seconds
+            epoch = int(r["bucket_epoch"])
+            t = datetime.fromtimestamp(epoch, tz=timezone.utc).isoformat()
+            v = r[key]
+            if v is not None:
+                pts.append({"t": t, "v": float(v)})
+        return pts
+
+    payload = {
+        "bucket_seconds": bucket,
+        "from": iso_utc(dt_from),
+        "to": iso_utc(dt_to),
+        "series": {
+            "temperature":    to_points("temperature"),
+            "humidity":       to_points("humidity"),
+            "pressure":       to_points("pressure"),
+            "gas_resistance": to_points("gas_resistance"),
+        }
+    }
+    return jsonify(payload)
 
 # === Application Entry Point ===
 if __name__ == "__main__":

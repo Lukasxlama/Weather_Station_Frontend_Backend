@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrendMetric } from './trend-metric';
+import { About } from './about';
 
-describe('TrendMetric', () => {
-  let component: TrendMetric;
-  let fixture: ComponentFixture<TrendMetric>;
+describe('About', () => {
+  let component: About;
+  let fixture: ComponentFixture<About>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrendMetric]
+      imports: [About]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TrendMetric);
+    fixture = TestBed.createComponent(About);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

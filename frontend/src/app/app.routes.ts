@@ -1,44 +1,45 @@
 import { Routes } from '@angular/router';
+import { About } from './pages/about/about';
 import { Latest } from './pages/latest/latest';
 import { Trend } from './pages/trend/trend';
-import { TrendMetric } from './pages/trend-metric/trend-metric';
-import { DebugComponent } from './pages/debug/debug';
+import { Debug } from './pages/debug/debug';
 import { NotFound } from './pages/not-found/not-found';
+
 
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'latest'
+        redirectTo: 'about'
+    },
+
+    {
+        path: 'about',
+        component: About,
+        title: 'About'
     },
 
     {
         path: 'latest',
         component: Latest,
-        title: 'Live-Daten'
+        title: 'Latest'
     },
 
     {
         path: 'trend',
         component: Trend,
-        title: 'Trendanalyse'
-    },
-
-    {
-        path: 'trend/:metric',
-        component: TrendMetric,
-        title: 'Trend: Einzelwert'
+        title: 'Trend'
     },
     
     {
         path: 'debug',
-        component: DebugComponent,
-        title: 'Debug / Dateninfo'
+        component: Debug,
+        title: 'Debug'
     },
     
     {
         path: '**',
         component: NotFound,
-        title: 'Seite nicht gefunden'
+        title: 'Not Found'
     }
 ];

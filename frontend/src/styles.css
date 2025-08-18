@@ -555,32 +555,6 @@ article
   text-overflow: ellipsis;
 }
 
-/* indicators inside caption */
-.caption-glass .carousel-indicators {
-  position: static;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: .35rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.caption-glass .carousel-indicators [data-bs-target] {
-  width: 22px;
-  height: 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, .45);
-  background: rgba(255, 255, 255, .35);
-  transition: transform .2s ease, background-color .2s ease;
-}
-
-.caption-glass .carousel-indicators .active {
-  background: linear-gradient(90deg, rgb(138, 180, 248), rgb(255, 185, 120));
-  border-color: rgba(255, 255, 255, .7);
-  transform: translateY(-1px);
-}
-
 /* responsive tweaks */
 @media (max-width: 768px) {
   .carousel-box {
@@ -592,5 +566,38 @@ article
     bottom: .55rem;
     padding: .45rem .7rem;
     gap: .35rem;
+  }
+}
+
+/* Mobile navbar: underline nur so breit wie der Text */
+@media (max-width: 576px) {
+
+  /* Links nicht zeilenbreit, sondern nur so breit wie der Inhalt */
+  .navbar .navbar-nav .nav-link {
+    display: inline-flex;
+    /* statt block */
+    width: auto;
+    /* nicht 100% */
+    padding-left: .35rem;
+    /* etwas Luft links/rechts */
+    padding-right: .35rem;
+  }
+
+  /* Nav-Items ebenfalls nicht auf Zeilenbreite festnageln */
+  .navbar .navbar-nav .nav-item {
+    width: auto;
+  }
+
+  /* Unterstreichung enger führen, damit sie nicht „ausläuft“ */
+  .navbar .nav-link::after {
+    left: .25rem;
+    right: .25rem;
+    bottom: 6px;
+    /* darf bleiben – nur der Textbereich zählt jetzt */
+  }
+
+  /* (optional) leichte Einrückung der Liste im Kollaps */
+  .navbar .navbar-nav {
+    padding: .25rem .5rem;
   }
 }

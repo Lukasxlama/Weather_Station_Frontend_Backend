@@ -46,11 +46,19 @@ export class SensorData implements OnInit, OnDestroy
 
   /** Human-friendly labels */
   protected labels: Record<keyof SensorDataModel, string> = {
-    temperature: 'Temperature (°C)',
-    humidity: 'Humidity (%)',
-    pressure: 'Pressure (hPa)',
-    gas_resistance: 'Gas Resistance (Ω)',
+    temperature: 'Temperatur',
+    humidity: 'Luftfeuchtigkeit',
+    pressure: 'Luftdruck',
+    gas_resistance: 'Gaswiderstand',
     timestamp: 'Timestamp'
+  };
+
+  protected units: Record<keyof SensorDataModel, string> = {
+    temperature: '°C',
+    humidity: '%',
+    pressure: 'hPa',
+    gas_resistance: 'kΩ',
+    timestamp: 'Uhr'
   };
 
   /** Icons from our enum */

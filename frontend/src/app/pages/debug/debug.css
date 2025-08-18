@@ -1,0 +1,209 @@
+/* ================================
+   GLASS FRAME AROUND THE EDITOR
+   ================================ */
+.sql-editor-glass {
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    border: 1px solid var(--glass-stroke);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .04)),
+        var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    box-shadow: var(--glass-shadow-1);
+}
+
+/* ================================
+   CODEMIRROR THEME: "aurora"
+   ================================ */
+
+/* root */
+.cm-s-aurora.CodeMirror {
+    /* make editor itself transparent to show your glass */
+    background: transparent !important;
+    color: #e7e9ee !important;
+
+    /* sizing/typography */
+    height: 300px;
+    padding: .5rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* make all inner layers transparent too */
+.cm-s-aurora .CodeMirror-scroll,
+.cm-s-aurora .CodeMirror-sizer,
+.cm-s-aurora .CodeMirror-lines,
+.cm-s-aurora .CodeMirror pre,
+.cm-s-aurora .CodeMirror-gutters,
+.cm-s-aurora .CodeMirror-linenumber,
+.cm-s-aurora .CodeMirror-gutter-filler,
+.cm-s-aurora .CodeMirror-scrollbar-filler {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* gutters + line numbers */
+.cm-s-aurora .CodeMirror-gutters {
+    border-right: 1px solid rgba(255, 255, 255, .12);
+}
+
+.cm-s-aurora .CodeMirror-linenumber {
+    color: rgba(231, 233, 238, .75);
+}
+
+/* caret, selection, active line */
+.cm-s-aurora .CodeMirror-cursor {
+    border-left: 2px solid #fff;
+}
+
+.cm-s-aurora .CodeMirror-selected {
+    background: rgba(138, 180, 248, .25);
+}
+
+.cm-s-aurora .CodeMirror-activeline-background {
+    background: rgba(255, 255, 255, .06);
+}
+
+/* ================================
+   SQL syntax colors (readable on glass)
+   ================================ */
+.cm-s-aurora .cm-keyword {
+    color: #d7a9ff;
+    font-weight: 600;
+}
+
+/* SELECT, FROM, ORDER BY … */
+.cm-s-aurora .cm-operator {
+    color: #ffd59e;
+}
+
+/* = * + - etc. */
+.cm-s-aurora .cm-def,
+.cm-s-aurora .cm-variable {
+    color: #ffffff;
+}
+
+/* identifiers */
+.cm-s-aurora .cm-type {
+    color: #8be9fd;
+}
+
+/* timestamp, int, … */
+.cm-s-aurora .cm-number {
+    color: #ffb86c;
+}
+
+.cm-s-aurora .cm-string {
+    color: #a8f0e9;
+}
+
+.cm-s-aurora .cm-comment {
+    color: #96a0aa;
+    font-style: italic;
+}
+
+.cm-s-aurora .cm-builtin {
+    color: #ffd59e;
+}
+
+.cm-s-aurora .cm-atom {
+    color: #ffb86c;
+}
+
+/* matching brackets / search highlights (optional) */
+.cm-s-aurora .CodeMirror-matchingbracket {
+    outline: 1px dashed rgba(255, 255, 255, .5);
+    color: inherit;
+}
+
+.cm-s-aurora .cm-searching {
+    background: rgba(255, 185, 120, .25);
+}
+
+/* Glass card stays pretty; no horizontal scroll here */
+.result-table-glass {
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--glass-stroke);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03)),
+        var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    box-shadow: var(--glass-shadow-1);
+}
+
+/* The scrolling lives here (inside the card) */
+.result-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* momentum scroll on iOS */
+}
+
+/* Table should be allowed to be wider than the viewport */
+.result-table-wrap>table {
+    min-width: 720px;
+    /* tweak: 640–960px depending on your columns */
+    margin: 0;
+    background: transparent;
+    border-collapse: separate;
+    /* for sticky header shadow */
+    border-spacing: 0;
+}
+
+/* Cells: transparent, borders subtle */
+.result-table-wrap th,
+.result-table-wrap td {
+    background: transparent;
+    /* let the glass show through */
+    border-color: rgba(255, 255, 255, .12);
+    color: #fff;
+    white-space: nowrap;
+    /* stop multiline breaks on narrow screens */
+}
+
+/* Sticky header that stays readable when scrolled */
+.result-table-wrap thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(0, 0, 0, .35), rgba(0, 0, 0, .25));
+    /* soft divider under header */
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .12);
+}
+
+/* Row stripes for readability (optional) */
+.result-table-wrap tbody tr:nth-child(even) td {
+    background: rgba(255, 255, 255, .03);
+}
+
+/* Tighten on small screens */
+@media (max-width: 768px) {
+    .result-table-wrap>table {
+        min-width: 640px;
+    }
+
+    .result-table-wrap th,
+    .result-table-wrap td {
+        padding: .5rem .6rem;
+        font-size: .9rem;
+    }
+
+    .result-table-glass {
+        border-radius: var(--radius-lg);
+    }
+}
+
+/* Extra-small phones */
+@media (max-width: 420px) {
+    .result-table-wrap>table {
+        min-width: 580px;
+    }
+
+    .result-table-wrap th,
+    .result-table-wrap td {
+        padding: .45rem .55rem;
+        font-size: .85rem;
+    }
+}

@@ -3,7 +3,12 @@
         @for (key of sensorKeys; let i = $index; track i)
         {
             <div class="col-auto">
-                <app-sensor-data-item [name]="labels[key]" [value]="sensorData[key]" [icon]="iconMap[key]"></app-sensor-data-item>
+                <app-sensor-data-item
+                    [name]="labels[key]"
+                    [value]="sensorData[key]"
+                    [unit]="units[key]"
+                    [icon]="iconMap[key]">
+                </app-sensor-data-item>
             </div>
         }
     </div>

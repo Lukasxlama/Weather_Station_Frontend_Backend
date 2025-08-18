@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DebugService } from '../../services/debug/debug';
@@ -10,19 +10,21 @@ import { ReceivedPacket } from '../../models/receivedpacket';
   standalone: true,
   imports: [CommonModule, FormsModule, CodemirrorModule],
   templateUrl: './debug.html',
+  styleUrls: ['./debug.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
-export class DebugComponent
+export class Debug
 {
   sqlQuery: string = `SELECT *\nFROM packets\nORDER BY timestamp\nDESC LIMIT 5;`;
   result: ReceivedPacket[] | null = null;
   resultKeys: (keyof ReceivedPacket)[] = [];
   viewMode: 'table' | 'raw' = 'table';
-  editorOptions = { mode: 'text/x-sql', theme: 'material-darker', lineNumbers: true, tabSize: 2 };
+  editorOptions = { mode: 'text/x-sql', theme: 'aurora', lineNumbers: true, tabSize: 2 };
   isError: boolean = false;
   isNotSelect: boolean = false;
 
-  constructor(private debugService: DebugService) { }
+  constructor(private debugService: DebugService) {}
 
   runQuery(): void
   {

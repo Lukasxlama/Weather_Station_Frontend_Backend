@@ -28,6 +28,8 @@ def init_db():
         conn.execute("CREATE INDEX IF NOT EXISTS idx_packets_ts_id ON packets(timestamp, id);")
         # (Optional) Häufige Suchen per id
         conn.execute("CREATE INDEX IF NOT EXISTS idx_packets_id ON packets(id);")
+        # Für /trends
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_packets_ts ON packets(timestamp);")
         # --------------------------------
         
 def save_packet(packet: ReceivedPacket):
