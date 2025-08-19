@@ -1,0 +1,64 @@
+# --- Angular / Build ---
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
+frontend/.angular/cache/
+frontend/coverage/
+frontend/libpeerconnection.log
+frontend/testem.log
+
+# --- Node / NPM / Yarn / PNPM ---
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# --- Python / Flask ---
+backend/__pycache__/
+backend/*.py[cod]
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/*.egg-info/
+backend/.eggs/
+backend/.mypy_cache/
+backend/.pytest_cache/
+backend/.venv/
+backend/venv/
+backend/env/
+backend/ENV/
+backend/pip-wheel-metadata/
+
+# SQLite DBs (Backend)
+backend/*.db
+backend/*.sqlite
+backend/*.sqlite3
+
+# --- Docker ---
+.dockerignore
+docker-compose.override.yml
+.env
+.env.*.local
+.env.local
+.envrc
+
+# --- IDEs / Editoren ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history/*
+
+# --- System ---
+.DS_Store
+Thumbs.db

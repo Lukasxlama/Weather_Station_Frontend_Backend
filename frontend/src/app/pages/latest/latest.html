@@ -1,0 +1,18 @@
+<div class="page-shell glass">
+    <hr class="hr-aurora my-4">
+
+    <h2 class="mb-3 text-center">Aktuelle Daten</h2>
+
+    <!-- Sensor Data Cards -->
+    @if (receivedPacket && receivedPacket.sensor_data)
+    {
+        <app-sensor-data [receivedPacket]="receivedPacket"></app-sensor-data>
+    }
+    
+    @else
+    {
+        <div class="placeholder-glass">Waiting for first packet…</div>
+    }
+
+    <hr class="hr-aurora my-4">
+</div>
