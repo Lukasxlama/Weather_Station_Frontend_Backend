@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError, finalize } from 'rxjs/operators';
 
-import { LoggerService } from '../logging/logging';
+import { LoggerService } from '../logger/logger';
 import { ReceivedPacket } from '../../models/receivedpacket';
 
 @Injectable({ providedIn: 'root' })

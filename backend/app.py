@@ -1,14 +1,10 @@
-import os
-import re
-import time
-import sqlite3
-import unicodedata
+import os, time, re, unicodedata, sqlite3
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS
 import paho.mqtt.client as mqtt
 
 from models import ReceivedPacket
-from database import init_db, save_packet
+from database import init_db, query_db, save_packet, connect_ro
 
 # === Application Setup ===
 app = Flask(__name__)
@@ -38,18 +34,6 @@ mqtt_client.on_message = on_message
 mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
 mqtt_client.subscribe(MQTT_TOPIC)
 mqtt_client.loop_start()
-
-# === Helper: execute a SQL query against data.db (not used by /debug/sql, kept for completeness) ===
-def query_db(sql, params=(), one=False):
-    """
-    Open a connection to data.db, execute the given SQL with parameters,
-    fetch all or one, then close the connection.
-    """
-    with sqlite3.connect("data.db") as conn:
-        conn.row_factory = sqlite3.Row
-        cur = conn.execute(sql, params)
-        rows = cur.fetchall()
-    return (rows[0] if rows else None) if one else rows
 
 # === SQL utils ===
 def strip_sql_comments_and_strings(sql: str) -> str:
@@ -147,10 +131,10 @@ def debug_sql():
         abort(400, description="Too many lines")
 
     # Read-only Verbindung + Sicherheits-PRAGMAs
-    con = sqlite3.connect("file:data.db?mode=ro", uri=True, check_same_thread=False)
+    con = connect_ro()
     con.enable_load_extension(False)
     con.execute("PRAGMA query_only = ON;")
-    con.execute("PRAGMA busy_timeout = 2000;")  # weniger 'database is locked'
+    con.execute("PRAGMA busy_timeout = 2000;")
 
     # Kurzer Timeout über Progress-Handler (z. B. 500ms)
     timeout_ms = 500
