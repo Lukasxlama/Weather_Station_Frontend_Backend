@@ -1,18 +1,20 @@
-/* Grid: 2×2 auf Desktop, 1 Spalte auf Mobile */
-.charts-grid {
+.charts-grid
+{
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-@media (max-width: 900px) {
-    .charts-grid {
+@media (max-width: 900px)
+{
+    .charts-grid
+    {
         grid-template-columns: 1fr;
     }
 }
 
-/* Glas-Karte fürs Chart */
-.chart-card {
+.chart-card
+{
     border-radius: var(--radius-xl);
     border: 1px solid var(--glass-stroke);
     background:
@@ -24,28 +26,31 @@
     padding: .75rem .75rem 1rem;
 }
 
-/* Titel klein & dezent */
-.chart-title {
+.chart-title
+{
     font-weight: 600;
     opacity: .9;
     margin-bottom: .25rem;
 }
 
-/* Chart Fläche (Höhe fixieren, responsive Breite) */
-.chart-wrap {
+.chart-wrap
+{
     position: relative;
     height: 260px;
-    /* Desktop */
 }
 
-@media (max-width: 900px) {
-    .chart-wrap {
+@media (max-width: 900px)
+{
+    .chart-wrap
+    {
         height: 220px;
     }
 }
 
-@media (max-width: 576px) {
-    .chart-wrap {
+@media (max-width: 576px)
+{
+    .chart-wrap
+    {
         height: 200px;
     }
 }

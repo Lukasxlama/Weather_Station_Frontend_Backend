@@ -1,7 +1,4 @@
-<div class="page-shell glass">
-    <hr class="hr-aurora my-4">
-
-    <h2 class="mb-3 text-center">Aktuelle Daten</h2>
+<app-page-shell [title]="'Aktuelle Daten'" [dividers]="'both'">
 
     <!-- Sensor Data Cards -->
     @if (receivedPacket && receivedPacket.sensor_data)
@@ -11,8 +8,6 @@
     
     @else
     {
-        <div class="placeholder-glass">Waiting for first packet…</div>
+        <h3 class="text-center">Warte auf Daten...</h3>
     }
-
-    <hr class="hr-aurora my-4">
-</div>
+</app-page-shell>

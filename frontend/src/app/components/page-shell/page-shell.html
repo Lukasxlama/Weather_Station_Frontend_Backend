@@ -1,0 +1,8 @@
+<div class="page-shell glass">
+    @if (dividers == 'top' || dividers === 'both') { <app-divider></app-divider> }
+
+    <h2 class="mb-4 text-center"> {{ title}} </h2>
+    <ng-content></ng-content>
+
+    @if (dividers === 'bottom' || dividers === 'both') { <app-divider></app-divider> }
+</div>

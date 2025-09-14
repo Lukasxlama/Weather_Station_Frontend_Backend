@@ -1,9 +1,9 @@
-import { TrendsSeries } from "./trendsseries";
+import type { TrendsSeriesModel } from "@app/models/trends/trendsseries";
 
-export interface TrendsResponse
+export interface TrendsResponseModel
 {
     bucket_seconds: number;
     from: string;
     to: string;
-    series: TrendsSeries;
+    series: TrendsSeriesModel;
 }

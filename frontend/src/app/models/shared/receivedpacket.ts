@@ -1,9 +1,9 @@
-import { SensorData } from "./sensordata";
+import type { SensorDataModel } from "@app/models/shared/sensordata";
 
 /**
  * Represents a packet received from the MQTT broker, optionally containing sensor data.
  */
-export interface ReceivedPacket
+export interface ReceivedPacketModel
 {
     /** Sequential packet number */
     packet_number: number;
@@ -18,7 +18,7 @@ export interface ReceivedPacket
     snr: number;
 
     /** Nested sensor data (if available) */
-    sensor_data: SensorData;
+    sensor_data: SensorDataModel;
 
     /** Error message string, if any */
     error?: string;

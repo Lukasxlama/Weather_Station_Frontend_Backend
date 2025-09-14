@@ -1,81 +1,86 @@
-<div class="page-shell glass">
-    <hr class="hr-aurora my-4">
-
-    <!-- Description & Image Example -->
+<app-page-shell [title]="'Über das Projekt'" [dividers]="'both'">    
     <div class="desc-carousel">
         <div class="desc-text">
-            <h2 class="mb-4">🌤 Über das Projekt</h2>
-            
-            <!-- Idee & Motivation -->
             <section class="mb-5">
-                <h4>💡 Idee & Motivation</h4>
+                <h4>Idee & Motivation</h4>
                 <p>
-                    Dieses Projekt begann mit der einfachen Frage:
-                    <em>„Kann man eine eigene Wetterstation bauen, die völlig unabhängig vom Stromnetz arbeitet?“</em><br>
-                    Die Antwort: Ja – und genau das macht diese Station. Sie vereint
-                    <strong>Elektronik</strong>, <strong>Programmierung</strong> und <strong>Funktechnik</strong>
-                    in einem kleinen, aber leistungsfähigen System.
+                    Kurz gesagt: Aus einer Mischung aus Neugier und Lust auf ein neues Projekt entstand die Idee, etwas Eigenes zu
+                    bauen,
+                    bei dem wir nicht nur Spaß haben, sondern auch eine Menge dazulernen können – und das Ganze idealerweise mit
+                    einem praktischen Nutzen.
                 </p>
                 <p>
-                    Ziel war es, eine Lösung zu schaffen, die <b>zuverlässig Messwerte liefert</b>,
-                    <b>energieautark arbeitet</b> und gleichzeitig Spaß beim Bauen macht.
-                    Ganz nebenbei eignet sich das Projekt perfekt, um neue Technologien wie
-                    <code>LoRa</code> und <code>MQTT</code> praktisch auszuprobieren.
+                    Nach einigem Überlegen fiel die Wahl schnell auf eine Outdoor-Wetterstation.
+                    Erste Inspiration und Grundlagen haben wir uns durch YouTube-Videos geholt, um einen Überblick zu bekommen.
+                </p>
+                <p>
+                    Unsere Motivation war es, verlässliche Messwerte zu gewinnen und dabei in möglichst viele spannende Themenfelder
+                    einzutauchen – von Mikroelektronik und Funktechnik bis hin zu Software-Entwicklung und Middleware.
                 </p>
             </section>
             
-            <!-- Hardware -->
             <section class="mb-5">
-                <h4>🔧 Hardware</h4>
+                <h4>Hardware</h4>
                 <p>
-                    Im Zentrum steht ein <code>ESP32</code>, ein stromsparender Mikrocontroller mit reichlich Power
-                    für Sensorabfragen und Funkübertragung. Der angeschlossene <code>BME680</code>-Sensor misst
-                    <b>Temperatur</b>, <b>Luftfeuchtigkeit</b>, <b>Luftdruck</b> und den <b>Gaswiderstand</b>.
+                    Das Herzstück der Station bildet ein ESP32 Dev Module – ein stromsparender Mikrocontroller mit
+                    genügend Leistung für Sensorabfragen und die drahtlose Datenübertragung.
+                    Angeschlossen ist ein BME680-Sensor, der Temperatur, Luftfeuchtigkeit,
+                    Luftdruck und den Gaswiderstand erfasst.
                 </p>
                 <p>
-                    Für die Energieversorgung sorgen zwei <strong>5 W Solarpanels</strong>, die einen
-                    <strong>3.200 mAh Li-Ion-Akku</strong> laden. Damit läuft die Station
-                    völlig autark – selbst in den Wintermonaten.
+                    Die Energieversorgung übernehmen zwei Solarpanels mit jeweils 5 W, die einen
+                    3.200 mAh Li-Ion-Akku laden. Dadurch arbeitet die Station völlig autark –
+                    sogar in den dunkleren Wintermonaten.
                 </p>
                 <p>
-                    Die gesamte Elektronik steckt in einem wetterfesten Outdoor-Gehäuse, ergänzt durch
-                    3D-gedruckte Halterungen für die Sensoren. So ist sie robust genug, um
-                    <b>ganzjährig Wind und Wetter</b> standzuhalten.
+                    Untergebracht ist die Elektronik in einem wetterfesten Outdoor-Gehäuse, ergänzt durch
+                    eine 3D-gedruckte Halterungen für den BME680. Damit ist die Station robust genug,
+                    um ganzjährig Wind und Wetter standzuhalten.
                 </p>
             </section>
             
-            <!-- Funk & Übertragung -->
             <section class="mb-5">
-                <h4>📡 Funk & Übertragung</h4>
+                <h4>ESP32 Code</h4>
                 <p>
-                    Die Messwerte werden über <strong>LoRa 868 MHz</strong> (SX1276) übertragen.
-                    Diese Technik ermöglicht Reichweiten von mehreren hundert Metern – ideal für
-                    den Garten, ohne auf WLAN oder Mobilfunk angewiesen zu sein.
+                    Der Code für den ESP32 ist modular aufgebaut. Sensor, Display und LoRa-Funk sind in eigene Manager ausgelagert
+                    und über eine zentrale Konfiguration steuerbar. So bleibt das Projekt übersichtlich und leicht erweiterbar.
                 </p>
                 <p>
-                    Im Haus empfängt ein <strong>Raspberry Pi</strong> die Pakete. Ein
-                    <code>MQTT-Broker</code> verteilt die Daten weiter, sodass sie sowohl in
-                    <strong>Home Assistant</strong> als auch im eigenen Flask-Backend verfügbar sind.
+                    Alle Einstellungen wie aktivierte Module, Pins und Betriebsarten werden in einer <code>Config.hpp</code>
+                    festgelegt. Dadurch lässt sich der Build komplett anpassen, ohne den eigentlichen Code ändern zu müssen.
+                </p>
+                <p>
+                    Die Komponenten sind einfach, aber zuverlässig umgesetzt. In der <code>main.cpp</code> werden sie
+                    zusammengeführt, initialisiert und nacheinander ausgeführt. So liest der ESP32 die Sensordaten aus, zeigt sie
+                    bei Bedarf auf dem Display an und sendet sie über LoRa weiter.
+                </p>
+                <p>
+                    Quellcode: <a href="https://github.com/Lukasxlama/weather_station_esp32">weather_station_esp32</a>
                 </p>
             </section>
             
-            <!-- Software & Visualisierung -->
             <section class="mb-5">
-                <h4>💻 Software & Visualisierung</h4>
+                <h4>Middleware (LoRa → MQTT)</h4>
                 <p>
-                    Das Backend basiert auf <code>Flask</code>, einer leichten Python-Web-API,
-                    die die Sensordaten speichert und bereitstellt.
-                    Dazu kommt eine eigene SQL-Debug-Konsole im Frontend, die direkte Einblicke in
-                    die Datenbank erlaubt.
+                    Die Middleware läuft auf dem Raspberry&nbsp;Pi und verbindet den LoRa-Empfänger mit einem MQTT-Broker.
+                    Sie ist bewusst schlank gehalten und trennt klar zwischen Empfang, Verarbeitung und Weitergabe der Daten.
                 </p>
                 <p>
-                    Im Frontend werden die Daten <b>live</b> angezeigt – optimiert für Desktop und Mobile.
-                    Neben der aktuellen Anzeige gibt es Langzeitanalysen und eine
-                    übersichtliche, glasartige UI, die das Projekt modern wirken lässt.
+                    Alle Einstellungen wie MQTT-Host, Pins und Logging werden zentral in einer <code>.env</code>-Datei konfiguriert.
+                    Installation und Betrieb erfolgen bequem über die mitgelieferten Skripte, die automatisch ein virtuelles
+                    Environment
+                    und einen systemd-Service einrichten.
+                </p>
+                <p>
+                    Über MQTT werden die Wetterdaten in strukturierter Form als JSON und einzeln pro Feld bereitgestellt. So stehen
+                    sie
+                    sowohl für Home Assistant als auch für das Backend der Website direkt zur Verfügung.
+                </p>
+                <p>
+                    Quellcode: <a href="https://github.com/Lukasxlama/weather_station_middleware">weather_station_middleware</a>
                 </p>
             </section>
-            
-            <!-- Installation & Alltag -->
+
             <section class="mb-5">
                 <h4>🌱 Installation im Garten</h4>
                 <p>
@@ -90,7 +95,6 @@
                 </p>
             </section>
             
-            <!-- Fazit -->
             <section>
                 <h4>🚀 Fazit</h4>
                 <p>
@@ -107,13 +111,12 @@
             </section>
         </div>
 
-        <hr class="hr-aurora my-4">
+        <app-divider></app-divider>
         <h2 class="mb-4">🖼️ Bilder</h2>
         <div class="carousel-box mt-4">
             <div #stationCarouselEl id="stationCarousel" class="carousel slide carousel-dark" data-bs-ride="carousel"
                 data-bs-touch="true" data-bs-interval="3000">
 
-                <!-- 16:9 Viewport; relative = Overlay bleibt innen -->
                 <div class="carousel-viewport position-relative">
                     <div class="carousel-inner">
                         @for (img of images; let i = $index; track i) {
@@ -123,7 +126,6 @@
                         }
                     </div>
 
-                    <!-- Overlay-UI: eine Box für Titel -->
                     @if (images.length)
                     {
                     <div class="caption-glass" [class.is-switching]="isSwitching">
@@ -134,7 +136,6 @@
                     }
                 </div>
 
-                <!-- Controls bleiben außerhalb, werden nicht abgeschnitten -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#stationCarousel"
                     data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -149,5 +150,4 @@
             </div>
         </div>
     </div>
-    <hr class="hr-aurora my-4">
-</div>
+</app-page-shell>

@@ -1,26 +1,46 @@
-import { Component} from '@angular/core';
-import { ReceivedPacket as ReceivedPacketModel } from '../../models/shared/receivedpacket';
-import { LatestService } from '../../services/latest/latest';
-import { SensorData } from "../../components/sensor-data/sensor-data";
+import { Component, type OnDestroy, type OnInit} from '@angular/core';
+import type { ReceivedPacketModel } from '@app/models/shared/receivedpacket';
+import { LatestService } from '@app/services/latest/latest';
+import { SensorDataComponent } from "@app/components/sensor-data/sensor-data";
+import { LoggerService } from '@app/services/logger/logger';
+import { PageShellComponent } from '@app/components/page-shell/page-shell';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-latest',
-  imports: [SensorData],
+  imports: [PageShellComponent, SensorDataComponent],
   templateUrl: './latest.html',
   styleUrl: './latest.css'
 })
-export class Latest
+export class LatestComponent implements OnInit, OnDestroy
 {
-  receivedPacket?: ReceivedPacketModel;
+  private readonly log;
+  protected receivedPacket?: ReceivedPacketModel;
+  private destroy$ = new Subject<void>();
 
-  constructor(private latestService: LatestService) {}
+  constructor(
+    private loggerService: LoggerService,
+    private latestService: LatestService
+  )
+  {
+    this.log = this.loggerService.withContext('LatestComponent');
+  }
 
   ngOnInit(): void
   {
-    this.latestService.pollLatestPacket(1000).subscribe(
-    {
-      next: data => this.receivedPacket = data,
-      error: err => console.error('Fehler beim Laden der Paketdaten', err)
-    });
+    this.latestService.pollLatestPacket(5000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+      {
+        next: data => this.receivedPacket = data,
+        error: err => this.log.error(err)
+      }
+    );
+  }
+
+  ngOnDestroy(): void
+  {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -1,9 +1,9 @@
-import { LogLevel } from "./loglevel";
+import type { LogLevelType } from "@app/models/logger/loglevel";
 
-export interface LoggerConfig
+export interface LoggerConfigModel
 {
-    level: LogLevel;
+    level: LogLevelType;
     withTimestamp?: boolean;
     withColors?: boolean;
-    remoteHook?: (level: LogLevel, ctx: string, message: any[], extra?: any) => void;
+    remoteHook?: (level: LogLevelType, ctx: string, message: any[], extra?: any) => void;
 }

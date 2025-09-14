@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, timer, switchMap } from 'rxjs';
-import { ReceivedPacket } from '../../models/shared/receivedpacket';
-import { LoggerService } from '../logger/logger';
-import { HttpService } from '../http/http';
+import type { ReceivedPacketModel } from '@app/models/shared/receivedpacket';
+import { LoggerService } from '@app/services/logger/logger';
+import { HttpService } from '@app/services/http/http';
+import { API_ENDPOINTS } from '@env/api-endpoints';
 
 @Injectable({ providedIn: 'root' })
 export class LatestService
@@ -17,13 +18,13 @@ export class LatestService
     this.log = this.loggerService.withContext('LatestService');
   }
 
-  getLatestPacket(): Observable<ReceivedPacket>
+  getLatestPacket(): Observable<ReceivedPacketModel>
   {
     this.log.debug('Requesting latest packet...');
-    return this.httpService.get<ReceivedPacket>('latest');
+    return this.httpService.get<ReceivedPacketModel>(API_ENDPOINTS.latest);
   }
 
-  pollLatestPacket(intervalMs = 5000): Observable<ReceivedPacket>
+  pollLatestPacket(intervalMs = 5000): Observable<ReceivedPacketModel>
   {
     this.log.info(`Starting polling every ${intervalMs}ms`);
     return timer(0, intervalMs).pipe(

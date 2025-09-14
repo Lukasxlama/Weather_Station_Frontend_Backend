@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError, finalize } from 'rxjs/operators';
 
-import { LoggerService } from '../logger/logger';
-import { ReceivedPacket } from '../../models/shared/receivedpacket';
-import { HttpService } from '../http/http';
+import { LoggerService } from '@app/services/logger/logger';
+import type { ReceivedPacketModel } from '@app/models/shared/receivedpacket';
+import { HttpService } from '@app/services/http/http';
+import { API_ENDPOINTS } from '@env/api-endpoints';
 
 @Injectable({ providedIn: 'root' })
 export class DebugService
@@ -20,12 +20,12 @@ export class DebugService
     this.log = this.loggerService.withContext('DebugService');
   }
 
-  runQuery(sql: string): Observable<ReceivedPacket[]>
+  runQuery(sql: string): Observable<ReceivedPacketModel[]>
   {
     const started = performance.now();
     this.log.info('runQuery: starting');
 
-    return this.httpService.post<ReceivedPacket[]>('/debug/sql', { sql }).pipe(
+    return this.httpService.post<ReceivedPacketModel[]>(API_ENDPOINTS.debug, { sql }).pipe(
       tap((rows) =>
         {
           this.log.info(`runQuery OK: ${rows?.length ?? 0} rows`);

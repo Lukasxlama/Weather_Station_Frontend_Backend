@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { LoggerConfig } from '../../models/logger/loggerconfig';
-import { LogLevel } from '../../models/logger/loglevel';
-import { environment } from '../../../environments/environment';
-const LEVELS: LogLevel[] = ['silent', 'error', 'warn', 'info', 'debug', 'trace'];
+import type { LoggerConfigModel } from '@app/models/logger/loggerconfig';
+import type { LogLevelType } from '@app/models/logger/loglevel';
+import { environment } from '@env/environment';
+const LEVELS: LogLevelType[] = ['silent', 'error', 'warn', 'info', 'debug', 'trace'];
 
 @Injectable({ providedIn: 'root' })
 export class LoggerService
 {
-  private config: LoggerConfig;
+  private config: LoggerConfigModel;
 
   constructor()
   {
     this.config =
     {
-      level: environment.logLevel as LogLevel,
+      level: environment.logLevel as LogLevelType,
       withTimestamp: true,
       withColors: true
     };
@@ -47,7 +47,7 @@ export class LoggerService
   }
 
   // --- Core logging logic ---
-  private log(level: LogLevel, ctx: string, message: any[])
+  private log(level: LogLevelType, ctx: string, message: any[])
   {
     if (LEVELS.indexOf(level) > LEVELS.indexOf(this.config.level)) return;
 
@@ -82,7 +82,7 @@ export class LoggerService
     return new Date().toISOString().split('T')[1].replace('Z', '');
   }
 
-  private style(level: LogLevel): string
+  private style(level: LogLevelType): string
   {
     switch (level)
     {

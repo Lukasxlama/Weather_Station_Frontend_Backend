@@ -1,7 +1,7 @@
 /**
  * Represents raw sensor readings.
  */
-export interface SensorData
+export interface SensorDataModel
 {
     /** Temperature in °C */
     temperature: number;

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TrendsResponse } from '../../models/trends/trendsresponse';
-import { HttpService } from '../http/http';
-import { LoggerService } from '../logger/logger';
+import type { TrendsResponseModel } from '@app/models/trends/trendsresponse';
+import { HttpService } from '@app/services/http/http';
+import { LoggerService } from '@app/services/logger/logger';
+import { API_ENDPOINTS } from '@env/api-endpoints';
 
 @Injectable({ providedIn: 'root' })
 export class TrendsService
@@ -18,9 +19,10 @@ export class TrendsService
     this.log = this.loggerService.withContext('TrendsService');
   }
 
-  getRange(fromISO: string, toISO: string): Observable<TrendsResponse>
+  getRange(fromISO: string, toISO: string): Observable<TrendsResponseModel>
   {
+    this.log.debug(`Getting data from ${fromISO} to ${toISO}`)
     const httpParams = new HttpParams().set('from', fromISO).set('to', toISO);
-    return this.httpService.get<TrendsResponse>("trends", { params: httpParams });
+    return this.httpService.get<TrendsResponseModel>(API_ENDPOINTS.trends, { params: httpParams });
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { LoggerService } from '../logger/logger';
+import { LoggerService } from '@app/services/logger/logger';
 import { catchError, map, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

@@ -1,10 +1,24 @@
-/* Ensure the icon is a bit larger */
+.card
+{
+    background: transparent;
+    border: 0;
+}
+
+.card .card-body
+{
+    background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .04)), var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    border: 1px solid var(--glass-stroke);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--glass-shadow-1);
+}
+
 .bi
 {
     font-size: 1.5rem;
 }
 
-/* Fine-tune the card width for smaller viewports */
 @media (max-width: 576px)
 {
     .card

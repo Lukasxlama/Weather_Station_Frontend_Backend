@@ -1,7 +1,5 @@
-<div class="page-shell glass">
+<app-page-shell [title]="'Trends'" [dividers]="'both'">
     <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
-        <h2 class="m-0">📈 Trends</h2>
-
         <div class="btn-group">
             <button class="btn btn-sm btn-outline-light" [class.active]="range==='24h'"
                 (click)="changeRange('24h')">24h</button>
@@ -41,4 +39,4 @@
 
         <div class="spinner-border spinner-border-sm ms-auto" *ngIf="loading"></div>
     </div>
-</div>
+</app-page-shell>

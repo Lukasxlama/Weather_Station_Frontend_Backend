@@ -1,6 +1,4 @@
-<div class="container-fluid py-4 text-light min-vh-100">
-    <h2 class="mb-4">🔧 SQL Debug Konsole</h2>
-
+<app-page-shell [title]="'SQL Debug Konsole'" [dividers]="'both'">
     <!-- Explanation -->
     <p class="mb-3">
         Diese Konsole erlaubt das Ausführen von readonly <strong>SELECT</strong>-Queries an die Datenbank im Backend.<br>
@@ -53,8 +51,8 @@
             @else
             {
                 <div class="result-table-glass">
-                    <div class="result-table-wrap">
-                        <table class="table table-sm mb-0 text-center align-middle">
+                    <div class="result-table-scroll">
+                        <table class="table text-center align-middle">
                             <thead>
                                 <tr>
                                     @for (key of resultKeys; let i = $index; track i)
@@ -80,4 +78,4 @@
             }
         </div>
     }
-</div>
+</app-page-shell>

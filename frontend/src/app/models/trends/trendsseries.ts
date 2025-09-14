@@ -1,4 +1,4 @@
-export interface TrendsSeries
+export interface TrendsSeriesModel
 {
     temperature: { t: string; v: number }[];
     humidity: { t: string; v: number }[];

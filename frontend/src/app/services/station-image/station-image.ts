@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpService } from '../http/http';
+import { HttpService } from '@app/services/http/http';
 import { Observable, map, catchError, of, tap } from 'rxjs';
-import { StationImage } from '../../models/station-image/stationimage';
-import { StationManifest } from '../../models/station-image/stationmanifest';
-import { LoggerService } from '../logger/logger';
+import type { StationImageModel } from '@app/models/station-image/stationimage';
+import type { StationManifestModel } from '@app/models/station-image/stationmanifest';
+import { LoggerService } from '@app/services/logger/logger';
+import { API_ENDPOINTS } from '@env/api-endpoints';
 
 @Injectable({ providedIn: 'root' })
 export class StationImageService
@@ -18,14 +19,12 @@ export class StationImageService
     this.log = this.loggerService.withContext('StationImageService');
   }
 
-  getImages(): Observable<StationImage[]>
+  getImages(): Observable<StationImageModel[]>
   {
-    const url = '/assets/station/manifest.json';
-
-    this.log.debug('Getting station manifest…', url);
+    this.log.debug('Getting station manifest…', API_ENDPOINTS.images);
 
     return this.httpService
-      .get<StationManifest>(url, { absolute: true })
+      .get<StationManifestModel>(API_ENDPOINTS.images, { absolute: true })
       .pipe(
         tap((manifest) => 
           this.log.info(`Manifest loaded (${manifest.images.length} images)`)),

@@ -1,116 +1,32 @@
 {
-  "generatedAt": "2025-08-18T17:29:36.574Z",
+  "generatedAt": "2025-09-01T14:21:50.017Z",
   "images": [
     {
-      "src": "assets/station/Anime Girl 1.jpg",
+      "src": "assets/station/BME680 Sensor.png",
       "alt": ""
     },
     {
-      "src": "assets/station/Anime Girl 2.jpg",
+      "src": "assets/station/ESP32 Dev Module.png",
       "alt": ""
     },
     {
-      "src": "assets/station/Anime Wallpaper.jpg",
+      "src": "assets/station/Laderegler.png",
       "alt": ""
     },
     {
-      "src": "assets/station/Anime Wallpaper.png",
+      "src": "assets/station/Li-Ion-Akku.png",
       "alt": ""
     },
     {
-      "src": "assets/station/Attack on Titan Wallpaper.jpg",
+      "src": "assets/station/SSD1306 Display.png",
       "alt": ""
     },
     {
-      "src": "assets/station/Badass Pokemon Wallpaper.png",
+      "src": "assets/station/SX1276 LoRa Transceiver.png",
       "alt": ""
     },
     {
-      "src": "assets/station/Destiny.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Domestic Girlfriend Wallpaper.png",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Dr. Stone Wallpaper.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Genshin Impact 1.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Genshin Impact 2.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Genshin Impact 3.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Genshin Impact 4.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Horimiya Wallpaper 2.png",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Horimiya Wallpaper 3.png",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Horimiya Wallpaper.png",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Kali NetHunter.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Kimetsu no Yaiba Wallpaper 1.png",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Magus Bride Wallpaper.png",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Makise Kurisu PB.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Naruto Rinnegan.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Naruto Wallpaper 2.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Naruto Wallpaper.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Noragami Wallpaper.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Oshi no Ko - Akane.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Steins;Gate.jpg",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Tokyo Revengers Wallpaper.png",
-      "alt": ""
-    },
-    {
-      "src": "assets/station/Violet Evergarden Wallpaper.jpg",
+      "src": "assets/station/Solarpanels.png",
       "alt": ""
     }
   ]

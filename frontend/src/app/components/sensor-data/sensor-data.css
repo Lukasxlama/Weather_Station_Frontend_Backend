@@ -1,10 +1,8 @@
-/* center the grid and add some top/bottom spacing */
 .sensor-data-container
 {
     margin: 1rem 0;
 }
 
-/* ensure cards stack nicely on small screens */
 @media (max-width: 576px)
 {
     .col-auto

@@ -1,20 +1,21 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SensorData as SensorDataModel } from '../../models/shared/sensordata';
-import { SensorDataItem, SensorDataIcon } from '../sensor-data-item/sensor-data-item';
-import { ReceivedPacket as ReceivedPacketModel } from '../../models/shared/receivedpacket';
+import type { SensorDataModel } from '../../models/shared/sensordata';
+import { SensorDataItemComponent } from '../sensor-data-item/sensor-data-item';
+import { SensorDataIconEnum } from '@app/models/sensor-data-items/sensor-data-icon';
+import type { ReceivedPacketModel } from '../../models/shared/receivedpacket';
 
 @Component({
   standalone: true,
   selector: 'app-sensor-data',
-  imports: [CommonModule, SensorDataItem],
+  imports: [CommonModule, SensorDataItemComponent],
   templateUrl: './sensor-data.html',
   styleUrl: './sensor-data.css'
 })
 
-export class SensorData implements OnInit, OnDestroy
+export class SensorDataComponent implements OnInit, OnDestroy
 {
-  /** The full sensor-data payload to display */
   @Input() receivedPacket!: ReceivedPacketModel;
   
   protected get sensorData(): SensorDataModel
@@ -24,19 +25,18 @@ export class SensorData implements OnInit, OnDestroy
 
   private intervalId: any;
 
-  ngOnInit() {
-    // Alle 60 Sekunden Zeit neu berechnen
-    this.intervalId = setInterval(() => {
-      // Trigger Change Detection
-    }, 60_000);
+  ngOnInit()
+  {
+    this.intervalId = setInterval(() => {}, 60_000);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy()
+  {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
-  /** Fixed display order */
-  protected sensorKeys: (keyof SensorDataModel)[] = [
+  protected sensorKeys: (keyof SensorDataModel)[] =
+  [
     'temperature',
     'humidity',
     'pressure',
@@ -44,8 +44,8 @@ export class SensorData implements OnInit, OnDestroy
     'timestamp'
   ];
 
-  /** Human-friendly labels */
-  protected labels: Record<keyof SensorDataModel, string> = {
+  protected labels: Record<keyof SensorDataModel, string> =
+  {
     temperature: 'Temperatur',
     humidity: 'Luftfeuchtigkeit',
     pressure: 'Luftdruck',
@@ -53,7 +53,8 @@ export class SensorData implements OnInit, OnDestroy
     timestamp: 'Timestamp'
   };
 
-  protected units: Record<keyof SensorDataModel, string> = {
+  protected units: Record<keyof SensorDataModel, string> =
+  {
     temperature: '°C',
     humidity: '%',
     pressure: 'hPa',
@@ -61,16 +62,17 @@ export class SensorData implements OnInit, OnDestroy
     timestamp: 'Uhr'
   };
 
-  /** Icons from our enum */
-  protected iconMap: Record<keyof SensorDataModel, SensorDataIcon> = {
-    temperature: SensorDataIcon.temperature,
-    humidity: SensorDataIcon.humidity,
-    pressure: SensorDataIcon.pressure,
-    gas_resistance: SensorDataIcon.gas_resistance,
-    timestamp: SensorDataIcon.timestamp,
+  protected iconMap: Record<keyof SensorDataModel, SensorDataIconEnum> =
+  {
+    temperature: SensorDataIconEnum.temperature,
+    humidity: SensorDataIconEnum.humidity,
+    pressure: SensorDataIconEnum.pressure,
+    gas_resistance: SensorDataIconEnum.gas_resistance,
+    timestamp: SensorDataIconEnum.timestamp,
   };
 
-  get relativeTime(): string {
+  get relativeTime(): string
+  {
     if (!this.receivedPacket?.timestamp) return '';
     const diffMin = Math.floor((Date.now() - new Date(this.receivedPacket.timestamp).getTime()) / 60000);
     return diffMin <= 0 ? 'gerade eben' : `vor ${diffMin} Minute${diffMin > 1 ? 'n' : ''}`;

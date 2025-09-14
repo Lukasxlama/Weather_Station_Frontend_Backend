@@ -1,7 +1,8 @@
 {
   "name": "frontend",
   "version": "0.0.0",
-  "scripts": {
+  "scripts":
+  {
     "ng": "ng",
     "prestart": "node scripts/generate-station-manifest.mjs",
     "start": "ng serve",
@@ -10,8 +11,11 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
-  "prettier": {
-    "overrides": [
+
+  "prettier":
+  {
+    "overrides":
+    [
       {
         "files": "*.html",
         "options": {
@@ -20,8 +24,10 @@
       }
     ]
   },
+
   "private": true,
-  "dependencies": {
+  "dependencies":
+  {
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
     "@angular/core": "^20.1.0",
@@ -43,7 +49,9 @@
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
-  "devDependencies": {
+
+  "devDependencies":
+  {
     "@angular/build": "^20.1.5",
     "@angular/cli": "^20.1.5",
     "@angular/compiler-cli": "^20.1.0",

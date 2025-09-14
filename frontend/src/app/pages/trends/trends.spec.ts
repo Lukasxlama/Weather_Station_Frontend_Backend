@@ -1,23 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TrendsComponent } from './trends';
 
-import { Trends } from './trends';
+describe('Trend', () =>
+{
+  let component: TrendsComponent;
+  let fixture: ComponentFixture<TrendsComponent>;
 
-describe('Trend', () => {
-  let component: Trends;
-  let fixture: ComponentFixture<Trends>;
+  beforeEach(async () =>
+  {
+    await TestBed.configureTestingModule(
+      {
+        imports: [TrendsComponent]
+      }
+    ).compileComponents();
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Trends]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(Trends);
+    fixture = TestBed.createComponent(TrendsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', () =>
+  {
     expect(component).toBeTruthy();
   });
 });

@@ -1,76 +1,90 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, NgZone } from '@angular/core';
-import { StationImageService } from '../../services/station-image/station-image';
-import { StationImage } from '../../models/station-image/stationimage';
-import { Subscription } from 'rxjs';
+import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
+import type { OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { StationImageService } from '@app/services/station-image/station-image';
+import type { StationImageModel } from '@app/models/station-image/stationimage';
+import { Subject, takeUntil } from 'rxjs';
+import { PageShellComponent } from '@app/components/page-shell/page-shell';
+import { DividerComponent } from "@app/components/divider/divider";
 
 @Component({
   selector: 'app-about',
-  imports: [],
+  imports: [PageShellComponent, DividerComponent],
   templateUrl: './about.html',
   styleUrl: './about.css'
 })
-export class About implements OnInit, AfterViewInit, OnDestroy
+export class AboutComponent implements OnInit, AfterViewInit, OnDestroy
 {
   @ViewChild('stationCarouselEl', { static: false })
   private carouselRef!: ElementRef<HTMLElement>;
-    images: StationImage[] = [];
-    activeIndex = 0;
-    isSwitching = false;
+  private destroy$ = new Subject<void>();
+  private removeListeners: Array<() => void> = [];
+
+  protected images: StationImageModel[] = [];
+  protected activeIndex = 0;
+  protected isSwitching = false;
   
-    private latestSub?: Subscription;
-    private imagesSub?: Subscription;
-    private removeListeners: Array<() => void> = [];
+  constructor(
+    private stationImageService: StationImageService,
+    private zone: NgZone
+  ) {}
 
-    constructor(
-        private stationImageService: StationImageService,
-        private zone: NgZone
-      ) {}
-
-    ngOnInit(): void
-    {
-      this.imagesSub = this.stationImageService.getImages().subscribe(imgs => {
+  ngOnInit(): void
+  {
+    this.stationImageService.getImages()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(imgs =>
+      {
         this.images = imgs ?? [];
-        if (this.images.length === 0) {
+        if (this.images.length === 0)
+        {
           this.activeIndex = 0;
           return;
         }
-        if (this.activeIndex >= this.images.length) {
+
+        if (this.activeIndex >= this.images.length)
+        {
           this.activeIndex = 0;
         }
-      });
-    }
+      }
+    );
+  }
     
-  ngAfterViewInit(): void {
-    const el = this.carouselRef?.nativeElement;
-    if (!el) return;
+  ngAfterViewInit(): void
+  {
+    const element = this.carouselRef?.nativeElement;
+    if (!element) return;
 
-    const onSlide = (e: any) => {
-      // Bootstrap-Event -> zurück in Angular Zone
-      this.zone.run(() => {
-        if (typeof e?.to === 'number') {
+    const onSlide = (e: any) =>
+    {
+      this.zone.run(() =>
+      {
+        if (typeof e?.to === 'number')
+        {
           this.isSwitching = true;
-          this.activeIndex = e.to;   // sofort Text/Captions updaten
+          this.activeIndex = e.to;
         }
       });
     };
 
-    const onSlid = () => {
-      this.zone.run(() => {
-        this.isSwitching = false;    // Fade wieder zurück
+    const onSlid = () =>
+    {
+      this.zone.run(() =>
+      {
+        this.isSwitching = false;
       });
     };
 
-    el.addEventListener('slide.bs.carousel', onSlide);
-    el.addEventListener('slid.bs.carousel', onSlid);
+    element.addEventListener('slide.bs.carousel', onSlide);
+    element.addEventListener('slid.bs.carousel', onSlid);
 
-    // for Cleanup
-    this.removeListeners.push(() => el.removeEventListener('slide.bs.carousel', onSlide));
-    this.removeListeners.push(() => el.removeEventListener('slid.bs.carousel', onSlid));
+    this.removeListeners.push(() => element.removeEventListener('slide.bs.carousel', onSlide));
+    this.removeListeners.push(() => element.removeEventListener('slid.bs.carousel', onSlid));
   }
 
-  ngOnDestroy(): void {
-    this.latestSub?.unsubscribe();
-    this.imagesSub?.unsubscribe();
+  ngOnDestroy(): void
+  {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.removeListeners.forEach(fn => fn());
     this.removeListeners = [];
   }

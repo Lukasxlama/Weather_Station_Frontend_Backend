@@ -1,9 +1,9 @@
-import { Routes } from '@angular/router';
-import { About } from './pages/about/about';
-import { Latest } from './pages/latest/latest';
-import { Trends } from './pages/trends/trends';
-import { Debug } from './pages/debug/debug';
-import { NotFound } from './pages/not-found/not-found';
+import type { Routes } from '@angular/router';
+import { AboutComponent } from '@app/pages/about/about';
+import { LatestComponent } from '@app/pages/latest/latest';
+import { TrendsComponent } from '@app/pages/trends/trends';
+import { DebugComponent } from '@app/pages/debug/debug';
+import { NotFound } from '@app/pages/not-found/not-found';
 
 export const routes: Routes = [
     {
@@ -14,25 +14,25 @@ export const routes: Routes = [
 
     {
         path: 'about',
-        component: About,
+        component: AboutComponent,
         title: 'About'
     },
 
     {
         path: 'latest',
-        component: Latest,
+        component: LatestComponent,
         title: 'Latest'
     },
 
     {
-        path: 'trend',
-        component: Trends,
-        title: 'Trend'
+        path: 'trends',
+        component: TrendsComponent,
+        title: 'Trends'
     },
     
     {
         path: 'debug',
-        component: Debug,
+        component: DebugComponent,
         title: 'Debug'
     },
     

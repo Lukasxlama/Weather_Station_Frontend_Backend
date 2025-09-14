@@ -1,7 +1,7 @@
-import { StationImage } from "./stationimage";
+import type { StationImageModel } from "@app/models/station-image/stationimage";
 
-export interface StationManifest
+export interface StationManifestModel
 {
     generatedAt: string;
-    images: StationImage[];
+    images: StationImageModel[];
 }

@@ -1,1 +1,1 @@
-export type LogLevel = 'silent' | 'error' | 'warn' | 'info' | 'debug' | 'trace';
+export type LogLevelType = 'silent' | 'error' | 'warn' | 'info' | 'debug' | 'trace';

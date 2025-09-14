@@ -1,0 +1,22 @@
+.page-shell
+{
+    width: auto;
+    max-width: none;
+    margin: 1rem;
+    padding: 18px 20px 22px;
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--glass-stroke);
+    background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .03)), var(--glass-bg);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .32);
+    overflow: hidden;
+}
+
+@media (max-width: 576px)
+{
+    .page-shell
+    {
+        margin: .75rem;
+    }
+}

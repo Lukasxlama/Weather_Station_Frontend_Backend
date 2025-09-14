@@ -1,18 +1,14 @@
-// src/app/pages/trend/trend.ts
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import type { OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { format } from 'date-fns';
-import { TrendsResponse } from '../../models/trends/trendsresponse';
-import { TrendsService } from '../../services/trends/trends';
+import type { TrendsResponseModel } from '@app/models/trends/trendsresponse';
+import { TrendsService } from '@app/services/trends/trends';
+import { PageShellComponent } from '@app/components/page-shell/page-shell';
 
-import {
-  Chart,
-  LineController, LineElement, PointElement,
-  CategoryScale, LinearScale, TimeScale,
-  Title, Tooltip, Legend, Filler, Decimation,
-  ChartOptions, TooltipItem
-} from 'chart.js';
+import { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, TimeScale, Title, Tooltip, Legend, Filler, Decimation } from 'chart.js';
+import type { ChartOptions, TooltipItem } from 'chart.js'
 import 'chartjs-adapter-date-fns';
 import zoomPlugin from 'chartjs-plugin-zoom';
 
@@ -25,39 +21,43 @@ Chart.register(
 @Component({
   standalone: true,
   selector: 'app-trends',
-  imports: [CommonModule],
+  imports: [CommonModule, PageShellComponent],
   templateUrl: './trends.html',
   styleUrl: './trends.css'
 })
-export class Trends implements OnInit, OnDestroy {
+export class TrendsComponent implements OnInit, OnDestroy
+{
   @ViewChild('tempCanvas', { static: true }) tempCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('humCanvas', { static: true }) humCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('pressCanvas', { static: true }) pressCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('gasCanvas', { static: true }) gasCanvas!: ElementRef<HTMLCanvasElement>;
 
-  // streng typisiert: line chart mit Scatter-Punkten (x=ms, y=number)
   protected charts: Chart<'line', { x: number; y: number }[], unknown>[] = [];
 
   range: '24h' | '7d' | '30d' = '24h';
   loading = false;
 
-  constructor(private api: TrendsService) { }
+  constructor(private trendsService: TrendsService) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void
+  {
     this.load();
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy(): void
+  {
     this.charts.forEach(c => c.destroy());
   }
 
-  changeRange(r: typeof this.range): void {
+  changeRange(r: typeof this.range): void
+  {
     if (this.range === r) return;
     this.range = r;
     this.load();
   }
 
-  private getRangeISO() {
+  private getRangeISO()
+  {
     const now = new Date();
     const toISO = now.toISOString();
     const from = new Date(now);
@@ -68,94 +68,107 @@ export class Trends implements OnInit, OnDestroy {
     return { fromISO, toISO };
   }
 
-  private async load(): Promise<void> {
+  private async load(): Promise<void>
+  {
     this.loading = true;
-    try {
+    try
+    {
       const { fromISO, toISO } = this.getRangeISO();
-      const res = await firstValueFrom(this.api.getRange(fromISO, toISO));
-
-      // Diagnose
-      console.log('[Trends]', this.range, {
-        t: res.series.temperature.length,
-        h: res.series.humidity.length,
-        p: res.series.pressure.length,
-        g: res.series.gas_resistance.length
-      });
-
-      this.render(res);
-    } catch (e) {
-      console.error('Trends load error', e);
-      this.render({
-        bucket_seconds: 0, from: '', to: '',
-        series: { temperature: [], humidity: [], pressure: [], gas_resistance: [] }
-      });
-    } finally {
+      this.render(await firstValueFrom(this.trendsService.getRange(fromISO, toISO)));
+    }
+    
+    catch (e)
+    {
+      this.render(
+        {
+          bucket_seconds: 0, from: '', to: '',
+          series: { temperature: [], humidity: [], pressure: [], gas_resistance: [] }
+        }
+      );
+    }
+    
+    finally
+    {
       this.loading = false;
     }
   }
 
-  /** Basis-Options – 24h ⇒ Stunden, sonst Tage; 24-Std-Format erzwingen */
-  private baseOptionsForRange(
-    unitLabel: string,
-    suggested?: { min?: number; max?: number }
-  ): ChartOptions<'line'> {
+  private baseOptionsForRange(unitLabel: string, suggested?: { min?: number; max?: number }): ChartOptions<'line'>
+  {
     const isDaily = this.range !== '24h';
     const tickFormat = isDaily ? 'dd.MM' : 'HH:mm';
     const tooltipFormat = isDaily ? 'yyyy-MM-dd HH:mm' : 'HH:mm';
 
-    return {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'nearest', intersect: false },
-      normalized: true,
-      plugins: {
-        legend: { labels: { color: '#e7e9ee' } },
-        tooltip: {
-          callbacks: {
-            label: (item: TooltipItem<'line'>) => `${item.formattedValue} ${unitLabel}`,
-            title: (items: TooltipItem<'line'>[]) => {
-              const v = items?.[0]?.parsed?.x;
-              return typeof v === 'number' ? format(new Date(v), tooltipFormat) : '';
+    return (
+      {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'nearest', intersect: false },
+        normalized: true,
+        plugins:
+        {
+          legend: { labels: { color: '#e7e9ee' } },
+          tooltip:
+          {
+            callbacks:
+            {
+              label: (item: TooltipItem<'line'>) => `${item.formattedValue} ${unitLabel}`,
+              title: (items: TooltipItem<'line'>[]) =>
+              {
+                const v = items?.[0]?.parsed?.x;
+                return typeof v === 'number' ? format(new Date(v), tooltipFormat) : '';
+              }
             }
-          }
-        },
-        zoom: {
-          zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
-          pan: { enabled: true, mode: 'x' },
-          limits: { x: { min: undefined as any, max: undefined as any } }
+          },
+
+          zoom:
+          {
+            zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
+            pan: { enabled: true, mode: 'x' },
+            limits: { x: { min: undefined as any, max: undefined as any } }
+          } as any,
+          decimation: { enabled: true, algorithm: 'lttb', samples: 1000 } as any
         } as any,
-        decimation: { enabled: true, algorithm: 'lttb', samples: 1000 } as any
-      } as any,
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            unit: isDaily ? 'day' : 'hour',
-            displayFormats: isDaily ? { day: tickFormat } : { hour: tickFormat }
+
+        scales:
+        {
+          x:
+          {
+            type: 'time',
+            time:
+            {
+              unit: isDaily ? 'day' : 'hour',
+              displayFormats: isDaily ? { day: tickFormat } : { hour: tickFormat }
+            },
+
+            ticks:
+            {
+              color: 'rgba(231,233,238,.85)',
+              maxRotation: 0,
+              callback: (value) =>
+              {
+                const ms = Number(value);
+                return Number.isFinite(ms) ? format(new Date(ms), tickFormat) : '';
+              }
+            },
+
+            grid: { color: 'rgba(255,255,255,.08)' }
           },
-          ticks: {
-            color: 'rgba(231,233,238,.85)',
-            maxRotation: 0,
-            callback: (value) => {
-              // Chart.js liefert bei time-scale in v4 meist ms (number)
-              const ms = Number(value);
-              return Number.isFinite(ms) ? format(new Date(ms), tickFormat) : '';
-            }
-          },
-          grid: { color: 'rgba(255,255,255,.08)' }
-        },
-        y: {
-          ticks: { color: 'rgba(231,233,238,.85)' },
-          grid: { color: 'rgba(255,255,255,.06)' },
-          suggestedMin: suggested?.min,
-          suggestedMax: suggested?.max
+
+          y:
+          {
+            ticks: { color: 'rgba(231,233,238,.85)' },
+            grid: { color: 'rgba(255,255,255,.06)' },
+            suggestedMin: suggested?.min,
+            suggestedMax: suggested?.max
+          }
         }
       }
-    };
+    );
   }
 
-  private render(res: TrendsResponse): void {
-    // alte Charts entsorgen
+  private render(res: TrendsResponseModel): void
+  {
     this.charts.forEach(c => c.destroy());
     this.charts = [];
 
@@ -164,26 +177,25 @@ export class Trends implements OnInit, OnDestroy {
     const ctxP = this.pressCanvas.nativeElement.getContext('2d')!;
     const ctxG = this.gasCanvas.nativeElement.getContext('2d')!;
 
-    const grad = (ctx: CanvasRenderingContext2D, from: string, to: string) => {
+    const grad = (ctx: CanvasRenderingContext2D, from: string, to: string) =>
+    {
       const g = ctx.createLinearGradient(0, 0, 0, 220);
       g.addColorStop(0, from);
       g.addColorStop(1, to);
       return g;
     };
 
-    // Gap-Schwelle: z.B. doppelte Bucket-Größe -> kleine Aussetzer überbrücken,
-    // aber große Pausen (Stunden) auftrennen.
     const bucketMs = (res.bucket_seconds ?? 300) * 1000;
     const gapLimitMs = bucketMs * 2;
 
-    // Hilfsfunktion: ISO → ms, null-sichere Konvertierung
     const toPoints = (arr: { t: string; v: number }[]) =>
       arr
         .map(d => ({ x: Date.parse(d.t), y: d.v }))
         .filter(p => Number.isFinite(p.x) && Number.isFinite(p.y))
         .sort((a, b) => a.x - b.x);
 
-    const createLine = (
+    const createLine =
+    (
       ctx: CanvasRenderingContext2D,
       label: string,
       data: { t: string; v: number }[],
@@ -192,14 +204,18 @@ export class Trends implements OnInit, OnDestroy {
       colorFillBottom: string,
       unit: string,
       sug?: { min?: number; max?: number }
-    ) => {
-      const chart = new Chart<'line', { x: number; y: number }[], unknown>(ctx, {
+    ) =>
+    {
+      const chart = new Chart<'line', { x: number; y: number }[], unknown>(ctx,
+      {
         type: 'line',
-        data: {
-          datasets: [{
+        data:
+        {
+          datasets: [
+          {
             label,
-            parsing: false,                 // wir liefern bereits x/y
-            data: toPoints(data),           // <<== ms statt ISO-String
+            parsing: false,
+            data: toPoints(data),
             spanGaps: gapLimitMs,
             borderColor: colorLine,
             pointRadius: 0,
@@ -215,7 +231,6 @@ export class Trends implements OnInit, OnDestroy {
       this.charts.push(chart);
     };
 
-    // Linien
     createLine(
       ctxT, 'Temperatur',
       res.series.temperature,
@@ -245,8 +260,10 @@ export class Trends implements OnInit, OnDestroy {
     );
   }
 
-  resetAllZoom(): void {
-    this.charts.forEach((ch: any) => {
+  resetAllZoom(): void
+  {
+    this.charts.forEach((ch: any) =>
+    {
       if (typeof ch?.resetZoom === 'function') ch.resetZoom();
     });
   }

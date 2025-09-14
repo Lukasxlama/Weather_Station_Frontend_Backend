@@ -1,4 +1,4 @@
-export interface StationImage
+export interface StationImageModel
 {
   src: string;
   alt?: string;

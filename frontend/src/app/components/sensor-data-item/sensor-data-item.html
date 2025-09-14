@@ -1,15 +1,11 @@
 <div class="card text-light rounded shadow-sm mb-3" style="width: 18rem;">
     <div class="card-body d-flex flex-column align-items-center">
-        <!-- optional icon -->
         @if (icon)
         {
             <i class="bi {{ icon }} mb-2" aria-hidden="true"></i>
         }
 
-        <!-- field name -->
         <h5 class="card-title text-center mb-2">{{ name }}</h5>
-
-        <!-- centered value -->
         <p class="card-text text-center mb-0">{{ displayValue }}</p>
     </div>
 </div>

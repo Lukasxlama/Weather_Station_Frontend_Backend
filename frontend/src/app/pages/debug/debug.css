@@ -1,7 +1,5 @@
-/* ================================
-   GLASS FRAME AROUND THE EDITOR
-   ================================ */
-.sql-editor-glass {
+.sql-editor-glass
+{
     border-radius: var(--radius-2xl);
     overflow: hidden;
     border: 1px solid var(--glass-stroke);
@@ -13,17 +11,11 @@
     box-shadow: var(--glass-shadow-1);
 }
 
-/* ================================
-   CODEMIRROR THEME: "aurora"
-   ================================ */
-
-/* root */
-.cm-s-aurora.CodeMirror {
-    /* make editor itself transparent to show your glass */
+.cm-s-aurora.CodeMirror
+{
     background: transparent !important;
     color: #e7e9ee !important;
 
-    /* sizing/typography */
     height: 300px;
     padding: .5rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -31,7 +23,6 @@
     line-height: 1.5;
 }
 
-/* make all inner layers transparent too */
 .cm-s-aurora .CodeMirror-scroll,
 .cm-s-aurora .CodeMirror-sizer,
 .cm-s-aurora .CodeMirror-lines,
@@ -39,171 +30,216 @@
 .cm-s-aurora .CodeMirror-gutters,
 .cm-s-aurora .CodeMirror-linenumber,
 .cm-s-aurora .CodeMirror-gutter-filler,
-.cm-s-aurora .CodeMirror-scrollbar-filler {
+.cm-s-aurora .CodeMirror-scrollbar-filler
+{
     background: transparent !important;
     background-color: transparent !important;
 }
 
-/* gutters + line numbers */
-.cm-s-aurora .CodeMirror-gutters {
+.cm-s-aurora .CodeMirror-gutters
+{
     border-right: 1px solid rgba(255, 255, 255, .12);
 }
 
-.cm-s-aurora .CodeMirror-linenumber {
+.cm-s-aurora .CodeMirror-linenumber
+{
     color: rgba(231, 233, 238, .75);
 }
 
-/* caret, selection, active line */
-.cm-s-aurora .CodeMirror-cursor {
+.cm-s-aurora .CodeMirror-cursor
+{
     border-left: 2px solid #fff;
 }
 
-.cm-s-aurora .CodeMirror-selected {
+.cm-s-aurora .CodeMirror-selected
+{
     background: rgba(138, 180, 248, .25);
 }
 
-.cm-s-aurora .CodeMirror-activeline-background {
+.cm-s-aurora .CodeMirror-activeline-background
+{
     background: rgba(255, 255, 255, .06);
 }
 
-/* ================================
-   SQL syntax colors (readable on glass)
-   ================================ */
-.cm-s-aurora .cm-keyword {
+.cm-s-aurora .cm-keyword
+{
     color: #d7a9ff;
     font-weight: 600;
 }
 
-/* SELECT, FROM, ORDER BY … */
-.cm-s-aurora .cm-operator {
+.cm-s-aurora .cm-operator
+{
     color: #ffd59e;
 }
 
-/* = * + - etc. */
 .cm-s-aurora .cm-def,
-.cm-s-aurora .cm-variable {
+.cm-s-aurora .cm-variable
+{
     color: #ffffff;
 }
 
-/* identifiers */
-.cm-s-aurora .cm-type {
+.cm-s-aurora .cm-type
+{
     color: #8be9fd;
 }
 
-/* timestamp, int, … */
-.cm-s-aurora .cm-number {
+.cm-s-aurora .cm-number
+{
     color: #ffb86c;
 }
 
-.cm-s-aurora .cm-string {
+.cm-s-aurora .cm-string
+{
     color: #a8f0e9;
 }
 
-.cm-s-aurora .cm-comment {
+.cm-s-aurora .cm-comment
+{
     color: #96a0aa;
     font-style: italic;
 }
 
-.cm-s-aurora .cm-builtin {
+.cm-s-aurora .cm-builtin
+{
     color: #ffd59e;
 }
 
-.cm-s-aurora .cm-atom {
+.cm-s-aurora .cm-atom
+{
     color: #ffb86c;
 }
 
-/* matching brackets / search highlights (optional) */
-.cm-s-aurora .CodeMirror-matchingbracket {
+.cm-s-aurora .CodeMirror-matchingbracket
+{
     outline: 1px dashed rgba(255, 255, 255, .5);
     color: inherit;
 }
 
-.cm-s-aurora .cm-searching {
+.cm-s-aurora .cm-searching
+{
     background: rgba(255, 185, 120, .25);
 }
 
-/* Glass card stays pretty; no horizontal scroll here */
-.result-table-glass {
-    border-radius: var(--radius-xl);
-    border: 1px solid var(--glass-stroke);
+.result-table-glass
+{
+    border-radius: 16px;
+    overflow: hidden;
+    border: none;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03)),
-        var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
-    box-shadow: var(--glass-shadow-1);
+        transparent;
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .35);
 }
 
-/* The scrolling lives here (inside the card) */
-.result-table-wrap {
+.result-table-scroll
+{
+    display: block;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    /* momentum scroll on iOS */
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
 }
 
-/* Table should be allowed to be wider than the viewport */
-.result-table-wrap>table {
+.result-table-scroll table
+{
     min-width: 720px;
-    /* tweak: 640–960px depending on your columns */
+    width: 100%;
     margin: 0;
+    border: 0;
     background: transparent;
     border-collapse: separate;
-    /* for sticky header shadow */
     border-spacing: 0;
 }
 
-/* Cells: transparent, borders subtle */
-.result-table-wrap th,
-.result-table-wrap td {
-    background: transparent;
-    /* let the glass show through */
+.result-table-glass .table>:not(caption)>*>*
+{
+    background-color: transparent !important;
+    box-shadow: none !important;
     border-color: rgba(255, 255, 255, .12);
     color: #fff;
-    white-space: nowrap;
-    /* stop multiline breaks on narrow screens */
 }
 
-/* Sticky header that stays readable when scrolled */
-.result-table-wrap thead th {
+.result-table-glass thead th
+{
     position: sticky;
     top: 0;
     z-index: 1;
     background: linear-gradient(180deg, rgba(0, 0, 0, .35), rgba(0, 0, 0, .25));
-    /* soft divider under header */
-    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .12);
+    border-bottom: 1px solid rgba(255, 255, 255, .12) !important;
 }
 
-/* Row stripes for readability (optional) */
-.result-table-wrap tbody tr:nth-child(even) td {
-    background: rgba(255, 255, 255, .03);
+.result-table-glass tbody tr+tr td
+{
+    border-top: 1px solid rgba(255, 255, 255, .08) !important;
 }
 
-/* Tighten on small screens */
-@media (max-width: 768px) {
-    .result-table-wrap>table {
+@media (max-width: 768px)
+{
+    .result-table-wrap>table
+    {
         min-width: 640px;
     }
 
     .result-table-wrap th,
-    .result-table-wrap td {
+    .result-table-wrap td
+    {
         padding: .5rem .6rem;
         font-size: .9rem;
     }
 
-    .result-table-glass {
+    .result-table-glass
+    {
         border-radius: var(--radius-lg);
     }
 }
 
-/* Extra-small phones */
-@media (max-width: 420px) {
-    .result-table-wrap>table {
+@media (max-width: 420px)
+{
+    .result-table-wrap>table
+    {
         min-width: 580px;
     }
 
     .result-table-wrap th,
-    .result-table-wrap td {
+    .result-table-wrap td
+    {
         padding: .45rem .55rem;
         font-size: .85rem;
     }
+}
+
+.alert
+{
+    border-radius: var(--radius-xl, 12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .04)),
+        rgba(20, 20, 20, 0.5);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .25);
+}
+
+.alert-danger
+{
+    border-color: rgba(234, 67, 53, 0.5);
+}
+
+.alert-warning
+{
+    border-color: rgba(251, 188, 4, 0.5);
+}
+
+.alert-success
+{
+    border-color: rgba(52, 168, 83, 0.5);
+}
+
+.alert-info
+{
+    border-color: rgba(138, 180, 248, 0.5);
 }

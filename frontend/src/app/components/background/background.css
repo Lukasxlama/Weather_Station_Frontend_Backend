@@ -1,0 +1,52 @@
+.aurora-bg
+{
+    --g1x: 10%;
+    --g1y: 8%;
+    --g2x: 78%;
+    --g2y: 6%;
+    --g3x: 52%;
+    --g3y: 92%;
+    --g4x: 22%;
+    --g4y: 82%;
+
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    
+    background:
+        radial-gradient(1200px 900px at var(--g1x) var(--g1y), rgba(255 120 150/.46), transparent 60%),
+        radial-gradient(1100px 800px at var(--g2x) var(--g2y), rgba(255 185 120/.42), transparent 62%),
+        radial-gradient(1000px 900px at var(--g3x) var(--g3y), rgba(180 140 255/.30), transparent 60%),
+        radial-gradient(900px 700px at var(--g4x) var(--g4y), rgba(90 210 200/.24), transparent 62%),
+        linear-gradient(180deg, #303030 0%, #181818 100%);
+
+    filter: saturate(118%);
+    box-shadow:
+        inset 0 0 140px 30px rgba(0, 0, 0, .58),
+        inset 0 -80px 160px -80px rgba(0, 0, 0, .45);
+}
+
+.aurora-bg::after
+{
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .025;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/>\
+<feColorMatrix type='saturate' values='0'/></filter>\
+<rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>");
+    background-size: 1000px 1000px;
+}
+
+@media (prefers-reduced-motion: reduce)
+{
+    .aurora-bg
+    {
+        background-attachment: fixed;
+    }
+}
